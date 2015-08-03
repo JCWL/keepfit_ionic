@@ -1,0 +1,36 @@
+<ion-view view-title="场馆信息">
+  <ion-content class="padding">
+    <div class="list card" ng-repeat="venue in venues">
+      <div class="item item-body" ui-sref="tab.venue-detail({venueId:venue.id})">
+        <img class="full-image" ng-src="{{venue.picSrc}}" height="200px">
+        <div class="row">
+          <div class="col">{{venue.name}}</div>
+          <div class="col col-offset-70" style="text-align:right">{{venue.name}}</div>
+        </div>
+        <div class="row">
+          <div class="col col-10"><i class="icon ion-ios-location-outline"></i></div>
+          <div class="col">{{venue.position}}</div>
+        </div>
+        <div class="row">
+          <div class="col col-10"><i class="icon ion-ios-clock-outline"></i></div>
+          <div class="col col-65">{{venue.time}}</div>
+          <div class="col col-25" style="text-align:right">{{venue.price | currency : "￥"}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+        <img ng-src="{{chat.face}}">
+        <h2>{{chat.name}}</h2>
+        <p>{{chat.lastText}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(chat)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+ -->
+  </ion-content>
+</ion-view>

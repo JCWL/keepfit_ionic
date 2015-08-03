@@ -1,0 +1,23 @@
+{
+    "id":"1",
+    "index": "1",
+    "name": "场馆一的名字",
+    "picSrc": "data/flower.jpg",
+    "position": "上海某个某个地方",
+    "time": "2014-01-01",
+    "tel":"13061903760",
+    "rate": "4.0",
+    "price":"35",
+    "availableSeats":3,
+    "capacity":10,
+    "longitude":121.594061,
+    "latitude":31.207879,
+    "resources": [
+    	{"image":"http://h.hiphotos.baidu.com/image/pic/item/b64543a98226cffc693a0dbbbb014a90f603eaa3.jpg",
+    	 "text":"主场馆"},
+    	{"image":"http://g.hiphotos.baidu.com/image/pic/item/8718367adab44aed9052c4f9b11c8701a18bfb8b.jpg",
+    	 "text":"卫生间"},
+    	{"image":"http://b.hiphotos.baidu.com/image/pic/item/a8773912b31bb0514942d121347adab44aede051.jpg",
+         "text":"浴室"}
+    	]
+}

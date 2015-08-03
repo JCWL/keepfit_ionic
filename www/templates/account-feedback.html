@@ -1,0 +1,15 @@
+<ion-view view-title="信息反馈">
+    <ion-content>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" ng-model="title" placeholder="标题">
+            </label>
+            <label class="item item-input">
+                <textarea ng-model="comments" placeholder="描述"></textarea>
+            </label>
+        </div>
+        <div class="list list-inset">
+            <button class="button button-full button-calm" ng-click="submitFeedback()">提交</button>
+        </div>
+    </ion-content>
+</ion-view>

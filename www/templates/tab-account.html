@@ -1,0 +1,30 @@
+<ion-view view-title="我的账户">
+    <ion-content>
+        <div class="list list-inset">
+            <a class="item item-avatar" ng-click="isLogined()">
+              <img src="img/ionic.png">
+              <h2>{{user.username}}</h2>
+              <p>{{user.phoneNum}}</p>
+            </a>
+        </div>
+
+        <!-- <button class="button button-calm" ng-click="clear()">清楚localstorage</button> -->
+        
+        <div class="list list-inset">
+            <a class="item item-icon-left" ui-sref="tab.orders">
+                <i class="icon ion-document-text"></i>
+                我的订单
+            </a>
+
+            <a class="item item-icon-left" ui-sref="tab.coupons">
+                <i class="icon ion-cash"></i>
+                我的优惠券
+            </a>
+
+            <a class="item item-icon-left" ui-sref="tab.feedback">
+                <i class="icon ion-compose"></i>
+                意见反馈
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

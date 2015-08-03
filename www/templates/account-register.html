@@ -1,0 +1,19 @@
+<ion-view view-title="登录">
+    <ion-content>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" ng-model="msg.phoneNum" placeholder="手机号码">
+            </label>
+            <label class="item item-input">
+                <input type="text" ng-model="msg.username" placeholder="验证码">
+            </label>
+        </div>
+        <div class="list list-inset">
+            <button class="button button-calm" ng-click="reset()">获取验证码</button>
+            <button class="button button-calm" ng-click="register()">立即登录</button>
+        </div>
+        <!-- <div class="list list-inset">
+            <button class="button button-calm" ng-click="reset()">重置</button>
+        </div> -->
+    </ion-content>
+</ion-view>
