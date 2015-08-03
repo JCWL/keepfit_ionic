@@ -86,6 +86,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
+    .state('tab.placeOrder', {
+      url: '/venues/:venueId/placeorder',
+      views: {
+        'tab-venues': {
+          templateUrl: 'templates/tab-order.html',
+          controller: 'PlaceOrderCtrl'
+        }
+      }
+    })
   .state('tab.account', {
     url: '/account',
     cache: false,

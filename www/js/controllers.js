@@ -34,6 +34,11 @@ angular.module('starter.controllers', [])
   $scope.zoom = 16;
 })
 
+// 下订单
+.controller('PlaceOrderCtrl', function($log, $scope, $stateParams) {
+  $log.log($stateParams);
+})
+
 .controller('AccountCtrl', function($scope, $log) {
   $scope.msgOnBtn = '发送验证码';
   $scope.disabled = false;
