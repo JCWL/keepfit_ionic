@@ -1,20 +1,33 @@
 <ion-view view-title="订单">
     <ion-content>
         <div class="list list-inset">
-            <a class="item" href="#">
-                地点：{{venue}}
-            </a>
 
-            <a class="item" href="#">
-                价格：{{venue}}
-            </a>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">*联系方式：</span>
-                <input type="text" placeholder="请输入您的手机号码">
-                <p>
-                您留下的手机号码将是课程变动时，我们客服联系到您的重要方式，请填写您最常使用的手机号码！
-                </p>
-            </label>
+            <div class="item item-thumbnail-left">
+              <img ng-src="venue.picSrc">
+              <h2>名称：{{venue.name}}</h2>
+              <h2>时间：{{venue.time}}</h2>
+            </div>
+
+            <div class="item">
+                地点：{{venue.position}}
+            </div>
+
+            <div class="item">价格：{{venue.price}}</div> 
+                
+            <div class="item">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">*联系方式：</span>
+                    <input type="text" ng-model="venue.phoneNum" placeholder="请输入您的手机号码">
+                </label>
+                
+                <pre style="padding-top:20px">您留下的手机号码将是课程变动时，我们客服联系到您的重要方式，请填写您最常使用的手机号码！
+                </pre>
+            </div>
+
+            <div class="item">
+                <button class="button button-clear button-stable" ng-click="cancel()">取消和退款</button>
+                <button class="button button-full button-assertive" ng-click="submit()">授权并使用微信安全支付</button>
+            </div>
             
         </div>
     </ion-content>
