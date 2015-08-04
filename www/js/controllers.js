@@ -39,44 +39,57 @@ angular.module('starter.controllers', [])
   $log.log($stateParams);
 })
 
-.controller('AccountCtrl', function($scope, $log) {
-  $scope.msgOnBtn = '发送验证码';
-  $scope.disabled = false;
-  $scope.register = function (argument) {
-    // body...
-  };
-  $scope.account = {
-    tel : '',
-    verifyCode : ''
-  }
-  $scope.sendSMS = function (argument) {
-    $scope.msgOnBtn = '正在发送验证码......';
-    $log.log(argument, $scope.account.tel , $scope.account.verifyCode)
-    $scope.disabled = true;
-  }
-  $scope.settings = {
-    enableFriends: true
-  };
-})
-.controller('AccountCtrl', function($scope,$state, $log, userService) {
-  $log.log("AccountCtrl start");
+// .controller('AccountCtrl', function($scope, $log) {
+//   $scope.msgOnBtn = '发送验证码';
+//   $scope.disabled = false;
+//   $scope.register = function (argument) {
+//     // body...
+//   };
+//   $scope.account = {
+//     tel : '',
+//     verifyCode : ''
+//   }
+//   $scope.sendSMS = function (argument) {
+//     $scope.msgOnBtn = '正在发送验证码......';
+//     $log.log(argument, $scope.account.tel , $scope.account.verifyCode)
+//     $scope.disabled = true;
+//   }
+//   $scope.settings = {
+//     enableFriends: true
+//   };
+// })
+.controller('AccountCtrl', function ($scope,$state, $log, userService, loginService) {
+
   $scope.user = {
     username : (userService.get('username')=='')?"未登入":userService.get('username'),
-    phoneNum : userService.get('phoneNum')
+    phoneNum : userService.get('phoneNum'),
   };
+
   $scope.isLogined = function () {
     if ($scope.user.username === '未登入') {
       $state.go('tab.register');
     };
   };
-  $scope.clear = function () {
+  $scope.logout = function () {
     localStorage.clear();
     $scope.user = {
       username : '',
       phoneNum : ''
     };
+
+    var token={
+      token : localStorage.token
+    }
+    $log.log("requset with data : " + angular.toJson(token));
+    loginService.logout(angular.toJson(token)).success(function (response) {
+
+      $log.log("response : " + response.status + response.msgs.fail);
+
+      }).error(function (response, status) {
+          
+    });
   }
-  $log.log("AccountCtrl end");
+
 })
 // 订单
 .controller('OrderCtrl', function($scope, $stateParams) {
@@ -94,26 +107,64 @@ angular.module('starter.controllers', [])
     }
 })
 // 注册用户
-.controller('RegisterCtrl', function($log, $scope, $stateParams, $state,loadDataService,userService) {
+.controller('RegisterCtrl', function ($log, $scope, $stateParams, $state, loadDataService, userService, loginService) {
     $scope.msg = {
       phoneNum : '' ,
       username : ''
     };
 
-    $scope.register = function (){
-        $log.log('register', $scope.msg.phoneNum ,$scope.msg.username);
+    $scope.msgOnBtn = '发送验证码';
+    $scope.isDisabled = false;
+
+    $scope.login = function (){
+        $log.log('login', $scope.msg.phoneNum ,$scope.msg.verifyCode);
         loadDataService.register($scope.msg.phoneNum).success(function (data, status){
-          localStorage.username = $scope.msg.username;
+          localStorage.username = $scope.msg.verifyCode;
           localStorage.phoneNum = $scope.msg.phoneNum;
-          userService.set('username', $scope.msg.username);
+          userService.set('username', $scope.msg.verifyCode);
           userService.set('phoneNum', $scope.msg.phoneNum);
           $state.go('tab.account');
         });
+
+        var user = {
+          phoneNum : $scope.msg.phoneNum,
+          authLogoUrl : "",
+          clientType : 1,
+          openId : "abcd1234",
+          smsCode : $scope.msg.verifyCode
+        };
+
+        $log.log("requset with data : " + angular.toJson(user));
+        loginService.login(angular.toJson(user)).success(function (response) {
+
+          $log.log("response : " + response.status + response.msgs.fail);
+
+          localStorage.token = "token_1234567890";
+
+          }).error(function (response, status) {
+              
+        });
     };
-    $scope.reset = function () {
-        $scope.msg.phoneNum = '';
-        $scope.msg.username = '';
-        $log.log('reset', $scope.msg.phoneNum , $scope.msg.username);
+    $scope.sendSms = function () {
+        $log.log("into sendSms...");
+        // $scope.msg.phoneNum = '';
+        // $scope.msg.verifyCode = '';
+        // $log.log('reset', $scope.msg.phoneNum , $scope.msg.verifyCode);
+        var registInfo = {
+          phoneNum : $scope.msg.phoneNum
+        };
+
+        $log.log("requset with data : " + angular.toJson(registInfo));
+        loginService.sendSms(angular.toJson(registInfo)).success(function (response) {
+
+          $log.log("response : " + response.status);
+          $scope.msgOnBtn = '正在发送验证码...';
+          $scope.isDisabled = true;
+
+          }).error(function (response, status) {
+              
+        });
+
     }
 })
 

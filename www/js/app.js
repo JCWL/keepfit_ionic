@@ -146,3 +146,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $urlRouterProvider.otherwise('/tab/venues');
 
 });
+
+var rootConfig = {
+    "debug": true,
+    "pathConfig": {
+        "basePath": "http://120.26.115.196:8080"
+    },
+    "currentVersion": "1.0"
+};
+
+var basicAuthHeaderValue;
