@@ -112,4 +112,48 @@ angular.module('starter.services', [])
             }
         };
     }
-]);
+])
+.factory('loginService', function ($http) {
+    var loginService = {
+        login: function (user) {
+            
+            var promise = $http.post(rootConfig.pathConfig.basePath + '/comm/login', user).success(function (response) {
+                
+                return response;
+            }).error(function (response, status) {
+                
+                console.log("response:" + response + ",status:" + status);
+                return status;
+            });
+            return promise;
+        },
+
+        logout: function (token) {
+            
+            var promise = $http.post(rootConfig.pathConfig.basePath + 'comm/logout', token).success(function (response) {
+                
+                return response;
+            }).error(function (response, status) {
+                
+                console.log("response:" + response + ",status:" + status);
+                return status;
+            });
+            return promise;
+        },
+
+        sendSms: function (registInfo) {
+
+          var promise = $http.post(rootConfig.pathConfig.basePath + '/comm/sendSms', registInfo).success(function (response) {
+                
+                return response;
+            }).error(function (response, status) {
+                
+                console.log("response:" + response + ",status:" + status);
+                return status;
+            });
+            return promise;
+
+        }
+    };
+    return loginService;
+});
