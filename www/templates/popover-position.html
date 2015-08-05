@@ -1,0 +1,27 @@
+<ion-popover-view style="width:90%;height:300px;">
+        <div class="row" style="height:300px;padding:0;margin:0">
+            <div class="col-50">
+                <ion-scroll style="height:300px">
+                    <label class="item item-radio" ng-repeat="p in positions">
+                        <input type="radio" name="groupDates">
+                        <div class="item-content">
+                          {{p}}
+                        </div>
+                        <i class="radio-icon ion-checkmark"></i>
+                    </label>
+                </ion-scroll>
+                
+            </div>
+            <div class="col-50">
+                <ion-scroll style="height:300px">
+                    <label class="item item-radio" ng-repeat="t in positions">
+                        <input type="radio" name="groupTimes">
+                        <div class="item-content">
+                          {{t}}
+                        </div>
+                        <i class="radio-icon ion-checkmark"></i>
+                    </label>
+                </ion-scroll>
+            </div>
+        </div>
+</ion-popover-view>

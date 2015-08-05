@@ -1,5 +1,16 @@
 <ion-view view-title="场馆信息">
   <ion-content class="padding">
+    <div class="button-bar">
+      <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverdatetime($event)">
+        <div style="line-height:22px">
+          <span style="font-size:16px">{{queryCondition.showDate}}</span>
+          <br>
+          <span style="font-size:15px">{{queryCondition.showTime}}</span>
+        </div>
+      </a>
+      <a class="button icon-right ion-arrow-down-b" ng-click="showpopovertype($event)">{{queryCondition.typeName}}</a>
+      <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverposition($event)">{{queryCondition.position}}</a>
+    </div>
     <div class="list card" ng-repeat="venue in venues">
       <div class="item item-body" ui-sref="tab.venue-detail({venueId:venue.id})">
         <img class="full-image" ng-src="{{venue.picSrc}}" height="200px">
