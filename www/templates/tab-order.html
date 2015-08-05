@@ -3,16 +3,16 @@
         <div class="list list-inset">
 
             <div class="item item-thumbnail-left">
-              <img ng-src="{{venue.picSrc}}">
+              <img ng-src="{{venue.logoPath}}">
               <h2>名称：{{venue.name}}</h2>
-              <h2>时间：{{venue.time}}</h2>
+              <h2>时间：{{venue.openTime | date:'yyyy-MM-dd (HH:mm'}}-{{venue.closeTime | date:'HH:mm)'}}</h2>
             </div>
 
             <div class="item">
-                地点：{{venue.position}}
+                地点：{{venue.addr}}
             </div>
 
-            <div class="item">价格：{{venue.price}}</div> 
+            <div class="item">价格：{{venue.price | currency : "￥"}}</div> 
                 
             <div class="item">
                 <label class="item item-input item-stacked-label">
