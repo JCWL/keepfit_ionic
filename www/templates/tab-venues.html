@@ -1,19 +1,21 @@
 <ion-view view-title="场馆信息">
   <ion-content class="padding">
+    <!-- 下拉列表 -->
+
     <div class="list card" ng-repeat="venue in venues">
       <div class="item item-body" ui-sref="tab.venue-detail({venueId:venue.id})">
         <img class="full-image" ng-src="{{venue.picSrc}}" height="200px">
         <div class="row">
-          <div class="col">{{venue.name}}</div>
-          <div class="col col-offset-70" style="text-align:right">{{venue.name}}</div>
+          <div class="col">{{venue.poiName}}</div>
+          <div class="col col-offset-70" style="text-align:right">{{venue.score}}星</div>
         </div>
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-location-outline"></i></div>
-          <div class="col">{{venue.position}}</div>
+          <div class="col">{{venue.addr}}</div>
         </div>
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-clock-outline"></i></div>
-          <div class="col col-65">{{venue.time}}</div>
+          <div class="col col-65">{{venue.openTime | date:'MM-dd (HH:mm'}}-{{venue.closeTime | date:'HH:mm)'}}</div>
           <div class="col col-25" style="text-align:right">{{venue.price | currency : "￥"}}</div>
         </div>
       </div>

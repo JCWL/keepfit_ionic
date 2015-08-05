@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function ($scope) {})
 
-.controller('VenuesCtrl', function($scope, loadDataService) {
+.controller('VenuesCtrl', function ($log, $scope, loadDataService) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -10,22 +10,30 @@ angular.module('starter.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  loadDataService.venueList('ss').success(function (data, status) {
-      $scope.venues = data;
+
+  var locInfo = {
+    "lon":121.585696,
+    "lat":31.209962,
+    "distance":10000
+  };
+
+  loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
+      $scope.venues = data.content;
+      $log.log("status : " + status);
   });
   // $scope.remove = function(chat) {
   //   Chats.remove(chat);
   // };
 })
 
-.controller('VenueDetailCtrl', function($scope, $stateParams, loadDataService) {
+.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, loadDataService) {
   loadDataService.venue($stateParams.venueId).success(function (data, status) {
       $scope.venue = data;
   });
   // $scope.chat = Chats.get();
 })
 
-.controller('VenueMapCtrl', function($scope, $stateParams) {
+.controller('VenueMapCtrl', function ($scope, $stateParams) {
   // $scope.venue = Chats.get($stateParams.venueId);
   console.log("into VenueMapCtrl...");
   
@@ -35,7 +43,7 @@ angular.module('starter.controllers', [])
 })
 
 // 下订单
-.controller('PlaceOrderCtrl', function($log, $scope, $stateParams) {
+.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams) {
   $log.log($stateParams);
 })
 
@@ -113,8 +121,8 @@ angular.module('starter.controllers', [])
       username : ''
     };
 
-    $scope.msgOnBtn = '发送验证码';
-    $scope.isDisabled = false;
+    $scope.msgOnBtn = '验证码';
+    $scope.disable = false;
 
     $scope.login = function (){
         $log.log('login', $scope.msg.phoneNum ,$scope.msg.verifyCode);
@@ -146,25 +154,46 @@ angular.module('starter.controllers', [])
         });
     };
     $scope.sendSms = function () {
-        $log.log("into sendSms...");
-        // $scope.msg.phoneNum = '';
-        // $scope.msg.verifyCode = '';
-        // $log.log('reset', $scope.msg.phoneNum , $scope.msg.verifyCode);
+
+        if($scope.msg.phoneNum == "" || $scope.msg.phoneNum == null){
+          alert("请输入手机号码");
+          return;
+        }
+
+        $scope.msgOnBtn = '重发';
+        $scope.disable = true;
+
+        $scope.countdown = 10;
+        var myTime = setInterval(function() {
+          $scope.countdown--;
+          $scope.$digest(); // 通知视图模型的变化
+        }, 1000);
+        // 倒计时50-0秒，但算上0的话就是51s
+        setTimeout(function() {
+          // Do SomeThing
+          $scope.msgOnBtn = '验证码';
+          $scope.countdown = null;
+          $scope.disable = false;
+          $scope.$digest(); // 通知视图模型的变化
+
+          clearInterval(myTime);
+          // $scope.countdown.$destroy();
+          
+        }, 11000);
+
         var registInfo = {
           phoneNum : $scope.msg.phoneNum
         };
 
-        $log.log("requset with data : " + angular.toJson(registInfo));
+        $log.log("request with data : " + angular.toJson(registInfo));
         loginService.sendSms(angular.toJson(registInfo)).success(function (response) {
 
-          $log.log("response : " + response.status);
-          $scope.msgOnBtn = '正在发送验证码...';
-          $scope.isDisabled = true;
+          if(response.status == 200)
+            $log.log("发送验证码成功");
 
           }).error(function (response, status) {
-              
+              $log.log("发送验证码失败");
         });
-
     }
 })
 
