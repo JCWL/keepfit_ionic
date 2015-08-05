@@ -42,8 +42,8 @@ angular.module('starter.services', [])
                 return doRequest(locInfo, rootConfig.pathConfig.basePath + '/venue/search');
             },
             // 加载场馆信息
-            venue: function(venueId) {
-                return doRequest(venueId, 'data/detail.json');
+            venue: function(params) {
+                return doRequest(params, rootConfig.pathConfig.basePath + '/venue/searchVenue');
             },
             // 所有类型列表
             types: function(){

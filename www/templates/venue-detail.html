@@ -20,7 +20,7 @@ The Friends service returns an array of friend data
 
 <ion-slide-box on-slide-changed="slideHasChanged($index)"  class="slidebox"  auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
   <ion-slide ng-repeat="resource in venue.resources">
-    <img ng-src="{{resource.image}}" style="margin:auto; height:250px">
+    <img ng-src="{{resource.path}}" style="margin:auto; height:250px">
     <!-- <div>
       <p>{{resource.text}}</p>
     </div> -->
@@ -28,13 +28,13 @@ The Friends service returns an array of friend data
 </ion-slide-box>
 
 <ion-list class="padding">
-  <ion-item class="list-group-item">仅剩<span class="label label-danger">{{venue.availableSeats}}</span>席|可容纳<span class="label label-default">{{venue.capacity}}</span>人</ion-item>
+  <ion-item class="list-group-item">仅剩<span class="label label-danger">{{venue.maxLimit}}</span>席|可容纳<span class="label label-default">{{venue.maxLimit}}</span>人</ion-item>
 </ion-list>
 
 <ion-list>
-  <ion-item><div class="icon ion-android-time">&nbsp;&nbsp;时间</div></ion-item>
-  <ion-item ui-sref="tab.map"><div class="icon ion-android-time">&nbsp;&nbsp;详细位置／距离</div></ion-item>
-  <ion-item href="tel:{{venue.tel}}"><div class="icon ion-android-time">&nbsp;&nbsp;电话</div></ion-item>
+  <ion-item><div class="icon ion-ios-clock-outline">&nbsp;&nbsp;时间</div></ion-item>
+  <ion-item ui-sref="tab.map({venueId:venue.id})"><div class="icon ion-ios-location-outline">&nbsp;&nbsp;详细位置／距离</div></ion-item>
+  <ion-item href="tel:{{venue.phone}}"><div class="icon ion-ios-telephone-outline">&nbsp;&nbsp;电话</div></ion-item>
 </ion-list>
 <!-- <div class="row">
   <div class="row">
@@ -48,7 +48,7 @@ The Friends service returns an array of friend data
    <div class="item item-body">
    <h2>简介</h2>
       <p>
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+        {{venue.introduce}}
       </p>
   </div>
 </ion-list>

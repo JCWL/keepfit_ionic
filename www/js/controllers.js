@@ -17,39 +17,53 @@ angular.module('starter.controllers', [])
     "distance":10000
   };
 
+  $log.log("requset with data : " + angular.toJson(locInfo));
   loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
       $scope.venues = data.content;
-      $log.log("status : " + status);
+      $log.log("response.status : " + status);
+      $log.log("response : " + angular.toJson(data));
   });
   // $scope.remove = function(chat) {
   //   Chats.remove(chat);
   // };
 })
 
-.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, loadDataService) {
-  loadDataService.venue($stateParams.venueId).success(function (data, status) {
-      $scope.venue = data;
+.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, loadDataService, settingsService) {
+
+  var params = {
+    "lon":121.585696,
+    "lat":31.209962,
+    "id":$stateParams.venueId
+  };
+
+  $log.log("requset with data : " + angular.toJson(params));
+  loadDataService.venue(params).success(function (data, status) {
+      
+      $log.log("response.status : " + status);
+      $log.log("response : " + angular.toJson(data));
+
+      $scope.venue = data.content[0];
+      settingsService.set("venue", data.content[0]);
+
   });
-  // $scope.chat = Chats.get();
 })
 
-.controller('VenueMapCtrl', function ($scope, $stateParams) {
-  // $scope.venue = Chats.get($stateParams.venueId);
-  console.log("into VenueMapCtrl...");
+.controller('VenueMapCtrl', function ($scope, $stateParams, settingsService) {
   
-  $scope.lng = 121.594061;
-  $scope.lat = 31.207879;
+  var venue = settingsService.get("venue");
+  $scope.lng = venue.lon;
+  $scope.lat = venue.lat;
   $scope.zoom = 16;
 })
 
 // 下订单
-.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams) {
-  $log.log($stateParams);
+.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, settingsService) {
+  $scope.venue = settingsService.get("venue");
+
 })
 
 
 .controller('AccountCtrl', function ($scope,$state, $log, userService, loginService) {
-  $log.log("AccountCtrl start");
 
   $scope.user = {
     username : (userService.get('username')=='')?"未登入":userService.get('username'),
@@ -62,7 +76,7 @@ angular.module('starter.controllers', [])
     };
   };
   $scope.logout = function () {
-    localStorage.clear();
+
     $scope.user = {
       username : '',
       phoneNum : ''
@@ -74,7 +88,11 @@ angular.module('starter.controllers', [])
     $log.log("requset with data : " + angular.toJson(token));
     loginService.logout(angular.toJson(token)).success(function (response) {
 
-      $log.log("response : " + response.status + response.msgs.fail);
+      $log.log("response.status : " + status);
+      $log.log("response : " + angular.toJson(response));
+
+      localStorage.clear();
+      $state.go('tab.venues');
 
       }).error(function (response, status) {
           
@@ -128,9 +146,10 @@ angular.module('starter.controllers', [])
         $log.log("requset with data : " + angular.toJson(user));
         loginService.login(angular.toJson(user)).success(function (response) {
 
-          $log.log("response : " + response.status + response.msgs.fail);
+          $log.log("response.status: " + response.status);
+          $log.log("response.content.token: " + response.content[0].token);
 
-          localStorage.token = "token_1234567890";
+          localStorage.token = response.content[0].token;
 
           }).error(function (response, status) {
               

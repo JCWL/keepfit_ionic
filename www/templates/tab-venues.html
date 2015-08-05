@@ -4,7 +4,7 @@
 
     <div class="list card" ng-repeat="venue in venues">
       <div class="item item-body" ui-sref="tab.venue-detail({venueId:venue.id})">
-        <img class="full-image" ng-src="{{venue.picSrc}}" height="200px">
+        <img class="full-image" ng-src="{{venue.logoPath}}" height="200px">
         <div class="row">
           <div class="col">{{venue.poiName}}</div>
           <div class="col col-offset-70" style="text-align:right">{{venue.score}}星</div>
