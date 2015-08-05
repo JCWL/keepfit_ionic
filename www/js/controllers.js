@@ -109,10 +109,15 @@ angular.module('starter.controllers', [])
   $scope.positions = ['青浦','徐汇','陆家嘴'];
 
   // 初始化运动类型数据
-  loadDataService.types().success(function(data, status) {
-      $scope.types = data;
-      $scope.queryCondition.typeName = data[0].name;
-      $scope.queryCondition.typeId = data[0].typeId;
+  var param = {};
+  $log.log("requset with data : " + angular.toJson(param));
+  loadDataService.types(param).success(function(data, status) {
+      $log.log("response.status : " + status);
+      $log.log("response : " + angular.toJson(data));
+
+      $scope.types = data.content;
+      $scope.queryCondition.typeName = data.content[0].name;
+      $scope.queryCondition.typeId = data.content[0].id;
   });
 
   // 选择种类时绑定函数

@@ -45,9 +45,9 @@ angular.module('starter.services', [])
             venue: function(params) {
                 return doRequest(params, rootConfig.pathConfig.basePath + '/venue/searchVenue');
             },
-            // 所有类型列表
-            types: function(){
-                return doRequest('', 'data/types.json')
+            // 所有场馆类型列表
+            types: function(param){
+                return doRequest(param, rootConfig.pathConfig.basePath  + '/const/searchVenueType');
             },
             // 注册用户
             register: function(phoneNum) {
