@@ -47,26 +47,9 @@ angular.module('starter.controllers', [])
   $log.log($stateParams);
 })
 
-// .controller('AccountCtrl', function($scope, $log) {
-//   $scope.msgOnBtn = '发送验证码';
-//   $scope.disabled = false;
-//   $scope.register = function (argument) {
-//     // body...
-//   };
-//   $scope.account = {
-//     tel : '',
-//     verifyCode : ''
-//   }
-//   $scope.sendSMS = function (argument) {
-//     $scope.msgOnBtn = '正在发送验证码......';
-//     $log.log(argument, $scope.account.tel , $scope.account.verifyCode)
-//     $scope.disabled = true;
-//   }
-//   $scope.settings = {
-//     enableFriends: true
-//   };
-// })
+
 .controller('AccountCtrl', function ($scope,$state, $log, userService, loginService) {
+  $log.log("AccountCtrl start");
 
   $scope.user = {
     username : (userService.get('username')=='')?"未登入":userService.get('username'),
