@@ -150,7 +150,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 var rootConfig = {
     "debug": true,
     "pathConfig": {
-        "basePath": "http://120.26.115.196:8080"
+        "basePath": "http://120.26.115.196:8080/jc"
     },
     "currentVersion": "1.0"
 };

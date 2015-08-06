@@ -212,40 +212,77 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('AccountCtrl', function ($scope,$state, $log, userService, loginService) {
+.controller('AccountCtrl', function ($scope, $state, $log, userService, loginService) {
+
+  if(localStorage.token == 'undefine' || localStorage.token == null){
+    $scope.disable = true;
+  }else{
+    $scope.disable = false;
+  }
 
   $scope.user = {
-    username : (userService.get('username')=='')?"未登入":userService.get('username'),
-    phoneNum : userService.get('phoneNum'),
+    username : (localStorage.username == null)?"未登入":localStorage.username,
+    phoneNum : localStorage.phoneNum,
   };
 
   $scope.isLogined = function () {
-    if ($scope.user.username === '未登入') {
+    if(localStorage.token == 'undefine' || localStorage.token == null){
       $state.go('tab.register');
-    };
+    }
   };
-  $scope.logout = function () {
 
-    $scope.user = {
-      username : '',
-      phoneNum : ''
-    };
+  $scope.logout = function () {
 
     var token={
       token : localStorage.token
     }
     $log.log("requset with data : " + angular.toJson(token));
     loginService.logout(angular.toJson(token)).success(function (response) {
+        $log.log("response : " + angular.toJson(response));
 
-      $log.log("response.status : " + status);
-      $log.log("response : " + angular.toJson(response));
-
-      localStorage.clear();
-      $state.go('tab.venues');
-
+        if(response.status === 200){
+          localStorage.clear();
+          $scope.user = {
+            username : '',
+            phoneNum : ''
+          };
+          $state.go('tab.venues');
+        }else{
+          alert("退出登录失败！");
+        }
       }).error(function (response, status) {
-          
+          alert("退出登录失败！");
     });
+  }
+
+  $scope.goOrders = function() {
+    //  进入订单列表
+    if(localStorage.token == 'undefine' || localStorage.token == null){
+      alert("请先登录");
+    }else{
+      $state.go('tab.orders');
+    }
+    
+  }
+
+  $scope.goCoupons = function() {
+    //  进入优惠券列表
+    if(localStorage.token == 'undefine' || localStorage.token == null){
+      alert("请先登录");
+    }else{
+      $state.go('tab.coupons');
+    }
+    
+  }
+
+  $scope.goFeedback = function() {
+    //  进入意见反馈
+    if(localStorage.token == 'undefine' || localStorage.token == null){
+      alert("请先登录");
+    }else{
+      $state.go('tab.feedback');
+    }
+
   }
 
 })
@@ -260,7 +297,7 @@ angular.module('starter.controllers', [])
 // 信息反馈
 .controller('FeedbackCtrl', function($scope, $stateParams) {
     $scope.submitFeedback = function () {
-        $scope.title = 'qqq';
+        $scope.fb_title = 'qqq';
         $scope.comments = 'www';
     }
 })
@@ -275,14 +312,6 @@ angular.module('starter.controllers', [])
     $scope.disable = false;
 
     $scope.login = function (){
-        $log.log('login', $scope.msg.phoneNum ,$scope.msg.verifyCode);
-        loadDataService.register($scope.msg.phoneNum).success(function (data, status){
-          localStorage.username = $scope.msg.verifyCode;
-          localStorage.phoneNum = $scope.msg.phoneNum;
-          userService.set('username', $scope.msg.verifyCode);
-          userService.set('phoneNum', $scope.msg.phoneNum);
-          $state.go('tab.account');
-        });
 
         var user = {
           phoneNum : $scope.msg.phoneNum,
@@ -295,11 +324,18 @@ angular.module('starter.controllers', [])
         $log.log("requset with data : " + angular.toJson(user));
         loginService.login(angular.toJson(user)).success(function (response) {
 
-          $log.log("response.status: " + response.status);
-          $log.log("response.content.token: " + response.content[0].token);
+            $log.log("response: " + angular.toJson(response));
 
-          localStorage.token = response.content[0].token;
-
+            if(response.status === 200){
+              localStorage.token = response.content[0].token;
+              localStorage.username = $scope.msg.verifyCode;
+              localStorage.phoneNum = $scope.msg.phoneNum;
+              // userService.set('username', $scope.msg.verifyCode);
+              // userService.set('phoneNum', $scope.msg.phoneNum);
+              $state.go('tab.account');
+            }else{
+              alert(response.msgs.fail);
+            }
           }).error(function (response, status) {
               
         });
@@ -339,7 +375,7 @@ angular.module('starter.controllers', [])
         $log.log("request with data : " + angular.toJson(registInfo));
         loginService.sendSms(angular.toJson(registInfo)).success(function (response) {
 
-          if(response.status == 200)
+          if(response.status === 200)
             $log.log("发送验证码成功");
 
           }).error(function (response, status) {

@@ -11,22 +11,22 @@
         
         
         <div class="list list-inset">
-            <a class="item item-icon-left" ui-sref="tab.orders">
+            <a class="item item-icon-left" ng-click="goOrders()">
                 <i class="icon ion-document-text"></i>
                 我的订单
             </a>
 
-            <a class="item item-icon-left" ui-sref="tab.coupons">
+            <a class="item item-icon-left" ng-click="goCoupons()">
                 <i class="icon ion-cash"></i>
                 我的优惠券
             </a>
 
-            <a class="item item-icon-left" ui-sref="tab.feedback">
+            <a class="item item-icon-left" ng-click="goFeedback()">
                 <i class="icon ion-compose"></i>
                 意见反馈
             </a>
         </div>
 
-        <button class="button button-full button-assertive" ng-click="logout()">退出登录</button>
+        <button class="button button-full button-assertive" ng-click="logout()" ng-disabled="disable">退出登录</button>
     </ion-content>
 </ion-view>

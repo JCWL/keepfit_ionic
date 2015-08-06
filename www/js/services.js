@@ -85,7 +85,7 @@ angular.module('starter.services', [])
 
         logout: function (token) {
             
-            var promise = $http.post(rootConfig.pathConfig.basePath + 'comm/logout', token).success(function (response) {
+            var promise = $http.post(rootConfig.pathConfig.basePath + '/comm/logout', token).success(function (response) {
                 
                 return response;
             }).error(function (response, status) {

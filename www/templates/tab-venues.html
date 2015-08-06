@@ -2,13 +2,13 @@
   <ion-content class="padding">
     <!-- 下拉列表 -->
     <div class="button-bar">
-      <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverdatetime($event)">
+      <!-- <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverdatetime($event)">
         <div style="line-height:22px">
           <span style="font-size:16px">{{queryCondition.showDate}}</span>
           <br>
           <span style="font-size:15px">{{queryCondition.showTime}}</span>
         </div>
-      </a>
+      </a> -->
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopovertype($event)">{{queryCondition.typeName}}</a>
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverposition($event)">{{queryCondition.position}}</a>
     </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-clock-outline"></i></div>
-          <div class="col col-65">{{venue.openTime | date:'MM-dd (HH:mm'}}-{{venue.closeTime | date:'HH:mm)'}}</div>
+          <div class="col col-65">{{venue.openTime | date:'HH:mm'}}-{{venue.closeTime | date:'HH:mm'}}</div>
           <div class="col col-25" style="text-align:right">{{venue.price | currency : "￥"}}</div>
         </div>
       </div>
