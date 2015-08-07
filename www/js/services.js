@@ -49,6 +49,10 @@ angular.module('starter.services', [])
             types: function(param){
                 return doRequest(param, rootConfig.pathConfig.basePath  + '/const/searchVenueType');
             },
+            // 地区列表
+            areas: function(param){
+                return doRequest(param, rootConfig.pathConfig.basePath  + '/const/searchAreaByLonLat');
+            },
             // 注册用户
             register: function(phoneNum) {
               return doRequest(phoneNum, '')

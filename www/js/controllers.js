@@ -81,33 +81,31 @@ angular.module('starter.controllers', [])
     queryTime : $scope.times[0].queryTime,
     typeName : '',
     typeId : '',
-    position : '位置'
+    areaName : '',
+    areaId : ''
   }
 
   // 选择日期时间时绑定函数
-  $scope.chooseDate = function(showDate, queryDate) {
-      $scope.queryCondition.showDate = showDate;
-      $scope.queryCondition.queryDate = queryDate;
-      $log.log("xuanzele : ", $scope.queryCondition.showDate, $scope.queryCondition.queryDate);
-  }
+  // $scope.chooseDate = function(showDate, queryDate) {
+  //     $scope.queryCondition.showDate = showDate;
+  //     $scope.queryCondition.queryDate = queryDate;
+  //     $log.log("xuanzele : ", $scope.queryCondition.showDate, $scope.queryCondition.queryDate);
+  // }
 
-  $scope.chooseTime = function(showTime, queryTime) {
-      $scope.queryCondition.showTime = showTime;
-      $scope.queryCondition.queryTime = queryTime;
-      $log.log("xuanzele : ", $scope.queryCondition.showTime, $scope.queryCondition.queryTime);
-  }
+  // $scope.chooseTime = function(showTime, queryTime) {
+  //     $scope.queryCondition.showTime = showTime;
+  //     $scope.queryCondition.queryTime = queryTime;
+  //     $log.log("xuanzele : ", $scope.queryCondition.showTime, $scope.queryCondition.queryTime);
+  // }
 
   // 选择日期时间之后
-  $scope.$on('popoverType.hidden', function() {
-    $log.log("popoverType.hidden");
-  });
-  $scope.$on('popoverDatetime.removed', function() {
-    $log.log("popoverDatetime.removed");
-  });
-
-  // 初始化位置的数据
-  $scope.positions = ['青浦','徐汇','陆家嘴'];
-
+  // $scope.$on('popoverType.hidden', function() {
+  //   $log.log("popoverType.hidden");
+  // });
+  // $scope.$on('popoverDatetime.removed', function() {
+  //   $log.log("popoverDatetime.removed");
+  // });
+  
   // 初始化运动类型数据
   var param = {};
   $log.log("requset with data : " + angular.toJson(param));
@@ -120,12 +118,35 @@ angular.module('starter.controllers', [])
       $scope.queryCondition.typeId = data.content[0].id;
   });
 
+  // 初始化位置的数据
+  var param = {
+    "lon":121.584814,
+    "lat":31.19264
+  };
+  $log.log("requset with data : " + angular.toJson(param));
+  loadDataService.areas(param).success(function(data, status) {
+      $log.log("response.status : " + status);
+      $log.log("response : " + angular.toJson(data));
+
+      $scope.positions = data.content;
+      $scope.queryCondition.areaName = data.content[0].areaName;
+      $scope.queryCondition.areaId = data.content[0].areaId;
+  });
+
   // 选择种类时绑定函数
   $scope.chooseType = function(typeName, typeId) {
       $scope.queryCondition.typeName = typeName;
       $scope.queryCondition.typeId = typeId;
       $scope.popoverType.hide();
-      $log.log("xuanzele : ", $scope.queryCondition.typeName, $scope.queryCondition.typeId);
+      $log.log("choosen type : ", $scope.queryCondition.typeName, $scope.queryCondition.typeId);
+  }
+
+  // 选择种类时绑定函数
+  $scope.choosePosition= function(areaName, areaId) {
+      $scope.queryCondition.areaName = areaName;
+      $scope.queryCondition.areaId = areaId;
+      $scope.popoverPosition.hide();
+      $log.log("choosen area : ", $scope.queryCondition.areaName, $scope.queryCondition.areaId);
   }
 
   // 初始化三个popover
