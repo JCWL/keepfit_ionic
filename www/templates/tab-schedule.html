@@ -1,0 +1,19 @@
+<ion-view view-title="时间">
+    <ion-content>
+
+    	<div class="row" style="height:300px;padding:0;margin:0">
+            <div class="col-50">
+                <ion-scroll style="height:auto">
+                    <ion-radio ng-repeat="schedule in schedules" ng-model="schedules" ng-click="changeDate(schedule)">{{schedule.date}}</ion-radio>
+                </ion-scroll>
+                
+            </div>
+            <div class="col-50">
+                <ion-scroll style="height:auto">
+                    <ion-radio ng-repeat="time in times" ng-model="time.uid" ng-click="changeTime(time)">{{time.startTime | date:'HH:mm'}}-{{time.endTime | date:'HH:mm'}}</ion-radio>
+                </ion-scroll>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+

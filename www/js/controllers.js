@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function ($scope) {})
 
-.controller('VenuesCtrl', function($scope, $log, $ionicPopover, loadDataService) {
+.controller('VenuesCtrl', function ($scope, $log, $ionicPopover, $ionicLoading, loadDataService) {
   // .fromTemplate() method
   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">{{title}}</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
 
@@ -191,14 +191,16 @@ angular.module('starter.controllers', [])
   };
 
   $log.log("requset with data : " + angular.toJson(locInfo));
+  $ionicLoading.show({template: 'Loading...'});
   loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
       $scope.venues = data.content;
       $log.log("response.status : " + status);
       $log.log("response : " + angular.toJson(data));
+      $ionicLoading.hide();
   });
 })
 
-.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, loadDataService, settingsService) {
+.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicLoading, loadDataService, settingsService) {
 
   var params = {
     "lon":121.585696,
@@ -207,6 +209,7 @@ angular.module('starter.controllers', [])
   };
 
   $log.log("requset with data : " + angular.toJson(params));
+  $ionicLoading.show({template: 'Loading...'});
   loadDataService.venue(params).success(function (data, status) {
       
       $log.log("response.status : " + status);
@@ -214,8 +217,60 @@ angular.module('starter.controllers', [])
 
       $scope.venue = data.content[0];
       settingsService.set("venue", data.content[0]);
-
+      $ionicLoading.hide();
   });
+})
+
+
+.controller('VenueScheduleCtrl', function ($log, $scope, $stateParams, $ionicLoading, settingsService) {
+
+    var venue = settingsService.get("venue");
+    var schedules = $scope.schedules = new Array();
+    $log.log("settingsType : " + venue.settingsType);
+    if(1===venue.settingsType){
+      //TODO 默认排班
+      var times;
+      // 取出默认时间段
+      for (var p in venue.st){
+        times = venue.st[p];
+      }
+      var today = new Date();
+      today.setDate(today.getDate()-1);
+      for (var i = 0; i < 7; i++) {
+
+          today.setDate(today.getDate()+1);
+          _year = today.getFullYear();
+          _month = today.getMonth()+1;
+          _date = today.getDate();
+          var schedule = new Object();
+          schedule.date = _year + '-' + _month + '-' + _date;
+          schedule.times = times;
+          schedules.push(schedule);
+      };
+    }else if(2==venue.settingsType){
+      //TODO 自定义排班
+      // 开始遍历 
+      for (var p in venue.st){
+        var schedule = new Object();
+        schedule.date = p;
+        schedule.times = venue.st[p];
+        schedules.push(schedule);
+      }
+    }else{
+      return;
+    }
+
+    $scope.times = schedules[0].times;
+
+    $scope.changeDate = function (schedule){
+      console.log("schedule : " + angular.toJson(schedule) );
+      $scope.times = schedule.times;
+    }
+
+    $scope.changeTime = function (time){
+      console.log("time.id : " + time.id);
+    }
+
 })
 
 .controller('VenueMapCtrl', function ($scope, $stateParams, settingsService) {

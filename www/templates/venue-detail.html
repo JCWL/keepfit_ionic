@@ -4,7 +4,7 @@ This template loads for the 'tab.friend-detail' state (app.js)
 The FriendsCtrl pulls data from the Friends service (service.js)
 The Friends service returns an array of friend data
 -->
-<ion-view view-title="{{venue.name}}">
+<ion-view view-title="场馆详情">
 <ion-content class="padding">
 <!-- 轮播图 -->
 <!-- <div>
@@ -32,7 +32,7 @@ The Friends service returns an array of friend data
 </ion-list>
 
 <ion-list>
-  <ion-item><div class="icon ion-ios-clock-outline">&nbsp;&nbsp;时间</div></ion-item>
+  <ion-item ui-sref="tab.schedule({venueId:venue.id})"><div class="icon ion-ios-clock-outline">&nbsp;&nbsp;时间</div></ion-item>
   <ion-item ui-sref="tab.map({venueId:venue.id})"><div class="icon ion-ios-location-outline">&nbsp;&nbsp;详细位置／距离</div></ion-item>
   <ion-item href="tel:{{venue.phone}}"><div class="icon ion-ios-telephone-outline">&nbsp;&nbsp;电话</div></ion-item>
 </ion-list>

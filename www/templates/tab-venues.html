@@ -1,14 +1,8 @@
-<ion-view view-title="场馆信息">
-  <ion-content class="padding">
+<ion-view view-title="场馆列表">
+
+  <ion-content class="padding">  
     <!-- 下拉列表 -->
     <div class="button-bar">
-      <!-- <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverdatetime($event)">
-        <div style="line-height:22px">
-          <span style="font-size:16px">{{queryCondition.showDate}}</span>
-          <br>
-          <span style="font-size:15px">{{queryCondition.showTime}}</span>
-        </div>
-      </a> -->
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopovertype($event)">{{queryCondition.typeName}}</a>
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverposition($event)">{{queryCondition.areaName}}</a>
     </div>
@@ -31,19 +25,5 @@
         </div>
       </div>
     </div>
-
-    <!-- <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
- -->
   </ion-content>
 </ion-view>
