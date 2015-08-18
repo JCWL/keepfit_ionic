@@ -108,7 +108,7 @@ angular.module('starter.controllers', [])
   
   // 初始化运动类型数据
   var param = {};
-  $log.log("requset with data : " + angular.toJson(param));
+  $log.log("requset {/const/searchVenueType} with data : " + angular.toJson(param));
   loadDataService.types(param).success(function(data, status) {
       $log.log("response.status : " + status);
       $log.log("response : " + angular.toJson(data));
@@ -120,10 +120,10 @@ angular.module('starter.controllers', [])
 
   // 初始化位置的数据
   var param = {
-    "lon":121.584814,
-    "lat":31.19264
+    "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
+    "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude
   };
-  $log.log("requset with data : " + angular.toJson(param));
+  $log.log("requset {/const/searchAreaByLonLat} with data : " + angular.toJson(param));
   loadDataService.areas(param).success(function(data, status) {
       $log.log("response.status : " + status);
       $log.log("response : " + angular.toJson(data));
@@ -185,12 +185,12 @@ angular.module('starter.controllers', [])
   // });
   
   var locInfo = {
-    "lon":121.585696,
-    "lat":31.209962,
+    "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
+    "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
     "distance":10000
   };
 
-  $log.log("requset with data : " + angular.toJson(locInfo));
+  $log.log("requset {/venue/search} with data : " + angular.toJson(locInfo));
   $ionicLoading.show({template: 'Loading...'});
   loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
       $scope.venues = data.content;
@@ -198,17 +198,25 @@ angular.module('starter.controllers', [])
       $log.log("response : " + angular.toJson(data));
       $ionicLoading.hide();
   });
+
+  $scope.loadMore = function () {
+    loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
+      $scope.venues = $scope.venues.concat(data.content);
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
+
 })
 
 .controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicLoading, loadDataService, settingsService) {
 
   var params = {
-    "lon":121.585696,
-    "lat":31.209962,
+    "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
+    "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
     "id":$stateParams.venueId
   };
 
-  $log.log("requset with data : " + angular.toJson(params));
+  $log.log("requset {/venue/searchVenue} with data : " + angular.toJson(params));
   $ionicLoading.show({template: 'Loading...'});
   loadDataService.venue(params).success(function (data, status) {
       
@@ -282,11 +290,49 @@ angular.module('starter.controllers', [])
 })
 
 // 下订单
-.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, settingsService) {
+.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, settingsService, loadDataService) {
+
+  var GetQueryString = function(name) {  
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+    var context = "";  
+    if (r != null)  
+         context = r[2];  
+    reg = null;  
+    r = null;  
+    return context == null || context == "" || context == "undefined" ? "" : context;  
+  }
+
   $scope.venue = settingsService.get("venue");
-
+  $scope.submitPay = function (){
+    // wx.chooseWXPay({
+    // timestamp: 0, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+    // nonceStr: '', // 支付签名随机串，不长于 32 位
+    // package: '', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+    // signType: '', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+    // paySign: '', // 支付签名
+    // success: function (res) {
+    //     // 支付成功后的回调函数
+    //   }
+    // });
+      var access_code=GetQueryString('code');
+      $scope.access_code = access_code;
+      if (access_code==null || access_code==""){
+        var fromurl=window.location.href;
+        window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+      }else{
+        var param = {
+          code:access_code
+        };
+        $log.log("param : " + angular.toJson(param));
+        loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+      
+            $log.log("response.status : " + status);
+            $log.log("response : " + angular.toJson(data));
+        });
+      }
+  }
 })
-
 
 .controller('AccountCtrl', function ($scope, $state, $log, userService, loginService) {
 
@@ -363,8 +409,9 @@ angular.module('starter.controllers', [])
 
 })
 // 订单
-.controller('OrderCtrl', function($scope, $stateParams) {
+.controller('OrderCtrl', function ($log, $scope, $stateParams) {
   // $scope.venue = Chats.get($stateParams.venueId);
+  
 })
 // 优惠券
 .controller('CouponCtrl', function($scope, $stateParams) {

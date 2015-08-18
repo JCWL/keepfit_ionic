@@ -37,6 +37,13 @@ angular.module('starter.services', [])
             });
         }
         return {
+            //微信签名
+            wechatConfig: function(url){
+                return doRequest(url, rootConfig.pathConfig.basePath + '/wechat/createJsapiSignature');
+            },
+            oauth2getAccessToken: function(code) {
+                return doRequest(code, rootConfig.pathConfig.basePath + '/wechat/oauth2getAccessToken');
+            },
             // 加载场馆列表数据
             venueList: function(locInfo) {
                 return doRequest(locInfo, rootConfig.pathConfig.basePath + '/venue/search');

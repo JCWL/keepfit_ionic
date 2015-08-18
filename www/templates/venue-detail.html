@@ -18,7 +18,7 @@ The Friends service returns an array of friend data
   </carousel>
 </div> -->
 
-<ion-slide-box on-slide-changed="slideHasChanged($index)"  class="slidebox"  auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
+<ion-slide-box show-pager="false" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
   <ion-slide ng-repeat="resource in venue.resources">
     <img ng-src="{{resource.path}}" style="margin:auto; height:250px">
     <!-- <div>

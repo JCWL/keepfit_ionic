@@ -7,7 +7,38 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives'])
 
-.run(function($ionicPlatform, $rootScope, $state, $stateParams, userService) {
+.run(function ($ionicPlatform, $rootScope, $state, $stateParams, userService, loadDataService) {
+
+
+
+  // wx.config({
+  //       debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+  //       appId: 'wxdf0798b126b0c235', // 必填，公众号的唯一标识
+  //       timestamp: 1439825332, // 必填，生成签名的时间戳
+  //       nonceStr: 'uJ67xNAImQbFgFDa', // 必填，生成签名的随机串
+  //       signature: '4d5c080fae2fe0dc2f8c6b735cb7ec9bf9666532',// 必填，签名，见附录1
+  //       jsApiList: ['getLocation','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+  //     });
+
+  //WeChat init;
+  var param = {
+    "url":"http://jcaries.tunnel.mobi/"
+  }
+  console.log("request {/wechat/createJsapiSignature} with data: " + angular.toJson(param));
+  loadDataService.wechatConfig(param).success(function (data,status){
+      console.log("response : " + angular.toJson(data));
+      wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: 'wxdf0798b126b0c235', // 必填，公众号的唯一标识
+        timestamp: data.content[0].timestamp, // 必填，生成签名的时间戳
+        nonceStr: data.content[0].noncestr, // 必填，生成签名的随机串
+        signature: data.content[0].signature,// 必填，签名，见附录1
+        jsApiList: ['getLocation','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      });
+
+  }).error(function (data, status){
+    console.log("signature faild");
+  });
 
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
@@ -15,19 +46,49 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   userService.set('phoneNum', localStorage.phoneNum == undefined? '':localStorage.phoneNum);
   userService.set('username', localStorage.username == undefined? '':localStorage.username);
 
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+  // $ionicPlatform.ready(function() {
+  //   // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+  //   // for form inputs)
+  //   if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+  //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+  //     cordova.plugins.Keyboard.disableScroll(true);
 
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleLightContent();
-    }
+  //   }
+  //   if (window.StatusBar) {
+  //     // org.apache.cordova.statusbar required
+  //     StatusBar.styleLightContent();
+  //   }
+  // });
+
+  wx.ready(function(){
+    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+     //通过微信获取地理位置
+    wx.getLocation({
+      type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+      success: function (res) {
+          localStorage.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+          localStorage.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+          // var speed = res.speed; // 速度，以米/每秒计
+          // var accuracy = res.accuracy; // 位置精度
+      }
+    });
   });
+
+//   var access_code=GetQueryString('code');
+//   if (access_code==null || access_code==""){
+//     var fromurl=window.location.href;
+//     window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+//   }else{
+//     var param = {
+//       code:access_code
+//     };
+//     $log.log("param : " + angular.toJson(param));
+//     loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+  
+//         $log.log("response.status : " + status);
+//         $log.log("response : " + angular.toJson(data));
+//     });
+//   }
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -159,9 +220,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 var rootConfig = {
     "debug": true,
     "pathConfig": {
-        "basePath": "http://120.26.115.196:8080/jc"
+        "basePath": "/jc"
     },
     "currentVersion": "1.0"
 };
-
-var basicAuthHeaderValue;
