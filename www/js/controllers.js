@@ -292,51 +292,57 @@ angular.module('starter.controllers', [])
 // 下订单
 .controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, settingsService, loadDataService) {
 
-  var GetQueryString = function(name) {  
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
-    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
-    var context = "";  
-    if (r != null)  
-         context = r[2];  
-    reg = null;  
-    r = null;  
-    return context == null || context == "" || context == "undefined" ? "" : context;  
-  }
-
   $scope.venue = settingsService.get("venue");
+
+  function onBridgeReady(data){
+    alert(angular.toJson(data));
+   WeixinJSBridge.invoke(
+       'getBrandWCPayRequest', {
+           "appId":data.content[0].appId,     //公众号名称，由商户传入     
+           "timeStamp": data.content[0].timeStamp,         //时间戳，自1970年以来的秒数     
+           "nonceStr": data.content[0].nonceStr, //随机串     
+           "package": data.content[0].package,     
+           "signType": data.content[0].signType,         //微信签名方式：     
+           "paySign": data.content[0].sign //微信签名 
+       },
+       function(res){     
+           if(res.err_msg == "get_brand_wcpay_request：ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+       }
+   ); 
+}
+
+
   $scope.submitPay = function (){
-    // wx.chooseWXPay({
-    // timestamp: 0, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-    // nonceStr: '', // 支付签名随机串，不长于 32 位
-    // package: '', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-    // signType: '', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-    // paySign: '', // 支付签名
-    // success: function (res) {
-    //     // 支付成功后的回调函数
-    //   }
-    // });
-      var access_code=GetQueryString('code');
-      $scope.access_code = access_code;
-      if (access_code==null || access_code==""){
-        var fromurl=window.location.href;
-        window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
-      }else{
-        var param = {
-          code:access_code
-        };
-        $log.log("param : " + angular.toJson(param));
-        loadDataService.oauth2getAccessToken(param).success(function (data, status) {
-      
-            $log.log("response.status : " + status);
-            $log.log("response : " + angular.toJson(data));
+    var params = {
+      "token":localStorage.token,
+      "id":300006,
+      "price":0.1
+    };
+    alert(angular.toJson(params));
+
+    loadDataService.getJsapiPayInfo(params).success(function (data, status) {
+      $log.log("data : " + angular.toJson(data));
+      alert(angular.toJson(data));
+      wx.chooseWXPay({
+        timestamp: data.content[0].timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        nonceStr: data.content[0].nonceStr, // 支付签名随机串，不长于 32 位
+        package: data.content[0].package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+        signType: data.content[0].signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+        paySign: data.content[0].sign, // 支付签名
+        success: function (res) {
+            // 支付成功后的回调函数
+            alert("支付成功");
+          }
         });
-      }
+
+    });
+      
   }
 })
 
-.controller('AccountCtrl', function ($scope, $state, $log, userService, loginService) {
+.controller('AccountCtrl', function ($scope, $state, $log, $ionicLoading, userService, loginService, loadDataService) {
 
-  if(localStorage.token == 'undefine' || localStorage.token == null){
+  if(localStorage.openId == undefined || localStorage.openId == null){
     $scope.disable = true;
   }else{
     $scope.disable = false;
@@ -347,33 +353,93 @@ angular.module('starter.controllers', [])
     phoneNum : localStorage.phoneNum,
   };
 
+  function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+    var context = "";  
+    if (r != null)  
+         context = r[2];  
+    reg = null;  
+    r = null;  
+    return context == null || context == "" || context == "undefined" ? "" : context;  
+  }
+
+  var access_code=GetQueryString('code');
+  if (access_code!=null && access_code!=""){
+    localStorage.accessCode = access_code;
+    var param = {
+        code:access_code
+    };
+    alert("param : " + angular.toJson(param));
+    loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+
+          $ionicLoading.show({template: '努力登录中...'});
+    
+          alert("response : " + angular.toJson(data));
+          localStorage.openId = data.content[0].openId;
+
+          //登录我们自己的服务器
+          var user = {
+            phoneNum : 1234567890,
+            authLogoUrl : "",
+            clientType : 1,
+            code : localStorage.accessCode,
+            openId : localStorage.openId,
+            smsCode : 1234
+          };
+
+          alert("requset with data : " + angular.toJson(user));
+          loginService.login(angular.toJson(user)).success(function (response) {
+
+              alert("response: " + angular.toJson(response));
+              localStorage.token = response.content[0].token;
+              $scope.user.username = localStorage.username = response.content[0].token;
+              $scope.user.phoneNum = localStorage.phoneNum = response.content[0].token;
+              $scope.disable = false;
+              $ionicLoading.hide();
+              $scope.$digest();
+            }).error(function (response, status) {
+                alert("登录失败");
+                $ionicLoading.hide();
+          });
+          //登录我们自己的服务器结束
+
+      });
+  }
+
   $scope.isLogined = function () {
-    if(localStorage.token == 'undefine' || localStorage.token == null){
-      $state.go('tab.register');
+      alert("localStorage.openId : " + localStorage.openId);
+    // if(localStorage.token == undefined || localStorage.token == null){
+    if(localStorage.openId == undefined || localStorage.openId == null){
+      var currenturl=window.location.href;
+      alert("currenturl : "+currenturl);
+      window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
     }
   };
 
   $scope.logout = function () {
 
+    $ionicLoading.show({template: '正在退出...'});
+
     var token={
       token : localStorage.token
     }
-    $log.log("requset with data : " + angular.toJson(token));
+    alert("requset with data : " + angular.toJson(token));
     loginService.logout(angular.toJson(token)).success(function (response) {
         $log.log("response : " + angular.toJson(response));
-
-        if(response.status === 200){
           localStorage.clear();
           $scope.user = {
-            username : '',
+            username : '未登录',
             phoneNum : ''
           };
+          $scope.disable = true;
+          $ionicLoading.hide();
           $state.go('tab.venues');
-        }else{
-          alert("退出登录失败！");
-        }
+          $scope.$digest();
+          
       }).error(function (response, status) {
           alert("退出登录失败！");
+          $ionicLoading.hide();
     });
   }
 
@@ -425,7 +491,38 @@ angular.module('starter.controllers', [])
     }
 })
 // 注册用户
-.controller('RegisterCtrl', function ($log, $scope, $stateParams, $state, loadDataService, userService, loginService) {
+.controller('RegisterCtrl', function ($log, $scope, $stateParams, $state, $ionicLoading, loadDataService, userService, loginService) {
+    
+    // function GetQueryString(name) {  
+    //   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+    //   var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+    //   var context = "";  
+    //   if (r != null)  
+    //        context = r[2];  
+    //   reg = null;  
+    //   r = null;  
+    //   return context == null || context == "" || context == "undefined" ? "" : context;  
+    // }
+
+    // var access_code=GetQueryString('code');
+    // if (access_code==null || access_code==""){
+    //   var currenturl=window.location.href+"/register";
+    //   alert("currenturl : "+currenturl);
+    //   window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+    // }else{
+    //   localStorage.accessCode = access_code;
+    //   var param = {
+    //     code:access_code
+    //   };
+    //   $log.log("param : " + angular.toJson(param));
+    //   loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+    
+    //       $log.log("response.status : " + status);
+    //       alert("response : " + angular.toJson(data));
+    //       localStorage.openId = data.content[0].openId;
+    //   });
+    // }
+
     $scope.msg = {
       phoneNum : '' ,
       username : ''
@@ -436,11 +533,14 @@ angular.module('starter.controllers', [])
 
     $scope.login = function (){
 
+        $ionicLoading.show({template: 'Loading...'});
+
         var user = {
           phoneNum : $scope.msg.phoneNum,
           authLogoUrl : "",
           clientType : 1,
-          openId : "abcd1234",
+          code : localStorage.accessCode,
+          openId : localStorage.openId,
           smsCode : $scope.msg.verifyCode
         };
 
@@ -459,8 +559,10 @@ angular.module('starter.controllers', [])
             }else{
               alert(response.msgs.fail);
             }
+            $ionicLoading.hide();
           }).error(function (response, status) {
-              
+              alert("登录失败");
+              $ionicLoading.hide();
         });
     };
     $scope.sendSms = function () {

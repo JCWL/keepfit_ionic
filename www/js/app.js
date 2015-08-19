@@ -9,26 +9,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .run(function ($ionicPlatform, $rootScope, $state, $stateParams, userService, loadDataService) {
 
-
-
-  // wx.config({
-  //       debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-  //       appId: 'wxdf0798b126b0c235', // 必填，公众号的唯一标识
-  //       timestamp: 1439825332, // 必填，生成签名的时间戳
-  //       nonceStr: 'uJ67xNAImQbFgFDa', // 必填，生成签名的随机串
-  //       signature: '4d5c080fae2fe0dc2f8c6b735cb7ec9bf9666532',// 必填，签名，见附录1
-  //       jsApiList: ['getLocation','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-  //     });
-
   //WeChat init;
   var param = {
-    "url":"http://jcaries.tunnel.mobi/"
+    "url":window.location.href
   }
   console.log("request {/wechat/createJsapiSignature} with data: " + angular.toJson(param));
   loadDataService.wechatConfig(param).success(function (data,status){
       console.log("response : " + angular.toJson(data));
       wx.config({
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: 'wxdf0798b126b0c235', // 必填，公众号的唯一标识
         timestamp: data.content[0].timestamp, // 必填，生成签名的时间戳
         nonceStr: data.content[0].noncestr, // 必填，生成签名的随机串
@@ -74,21 +63,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     });
   });
 
-//   var access_code=GetQueryString('code');
-//   if (access_code==null || access_code==""){
-//     var fromurl=window.location.href;
-//     window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
-//   }else{
-//     var param = {
-//       code:access_code
-//     };
-//     $log.log("param : " + angular.toJson(param));
-//     loadDataService.oauth2getAccessToken(param).success(function (data, status) {
-  
-//         $log.log("response.status : " + status);
-//         $log.log("response : " + angular.toJson(data));
-//     });
-//   }
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -167,7 +141,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     })
   .state('tab.account', {
     url: '/account',
-    cache: false,
+    // cache: false,
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
@@ -204,6 +178,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('tab.register', {
     url: '/account/register',
+    // reload: true,
     views: {
       'tab-account': {
         templateUrl: 'templates/account-register.html',

@@ -44,6 +44,9 @@ angular.module('starter.services', [])
             oauth2getAccessToken: function(code) {
                 return doRequest(code, rootConfig.pathConfig.basePath + '/wechat/oauth2getAccessToken');
             },
+            getJsapiPayInfo: function(params) {
+                return doRequest(params, rootConfig.pathConfig.basePath + '/order/getJsapiPayInfo');
+            },
             // 加载场馆列表数据
             venueList: function(locInfo) {
                 return doRequest(locInfo, rootConfig.pathConfig.basePath + '/venue/search');
