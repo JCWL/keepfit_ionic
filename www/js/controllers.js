@@ -128,9 +128,9 @@ angular.module('starter.controllers', [])
       $log.log("response.status : " + status);
       $log.log("response : " + angular.toJson(data));
 
-      $scope.positions = data.content;
-      $scope.queryCondition.areaName = data.content[0].areaName;
-      $scope.queryCondition.areaId = data.content[0].areaId;
+      $scope.positions = data.content[0].areas;
+      $scope.queryCondition.areaName = data.content[0].areas[0].areaName;
+      $scope.queryCondition.areaId = data.content[0].areas[0].areaId;
   });
 
   // 选择种类时绑定函数
@@ -209,6 +209,19 @@ angular.module('starter.controllers', [])
 })
 
 .controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicLoading, loadDataService, settingsService) {
+
+
+  // $scope.openWechatMap = function(){
+  //   console.log("openWxMap...");
+  //   wx.openLocation({
+  //       latitude: 31.209962, // 纬度，浮点数，范围为90 ~ -90
+  //       longitude: 121.585696, // 经度，浮点数，范围为180 ~ -180。
+  //       name: '张江高科', // 位置名
+  //       address: '', // 地址详情说明
+  //       scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
+  //       infoUrl: 'www.baidu.com' // 在查看位置界面底部显示的超链接,可点击跳转
+  //   });
+  // }
 
   var params = {
     "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
@@ -290,50 +303,68 @@ angular.module('starter.controllers', [])
 })
 
 // 下订单
-.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, settingsService, loadDataService) {
+.controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, $state, $ionicLoading, settingsService, loadDataService) {
+
+  function onBridgeReady(result){
+    // alert("进入onBridgeReady函数，开始支付\n"+angular.toJson(result));
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId" : result.content[0].appId,                  //公众号名称，由商户传入  
+            // "appId" : 'wxdf0798b126b0c235',
+            "timeStamp":result.content[0].timeStamp,          //时间戳，自 1970 年以来的秒数  
+            "nonceStr" : result.content[0].nonceStr,         //随机串  
+            "package" : result.content[0].package,      //商品包信息
+            "signType" : result.content[0].signType,        //微信签名方式:  
+            "paySign" : result.content[0].sign  
+           },
+          function(res){
+             //alert(res.err_msg);  // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返
+            switch(res.err_msg) {
+              case 'get_brand_wcpay_request:cancel':
+                alert('用户取消支付！');
+                break;
+              case 'get_brand_wcpay_request:fail':
+                alert('支付失败！（'+res.err_desc+'）');
+                break;
+              case 'get_brand_wcpay_request:ok':
+                alert('支付成功！');
+                break;
+              default:
+                alert(JSON.stringify(res));
+                break;
+            } 
+
+           }
+         );
+       }
 
   $scope.venue = settingsService.get("venue");
 
-  function onBridgeReady(data){
-    alert(angular.toJson(data));
-   WeixinJSBridge.invoke(
-       'getBrandWCPayRequest', {
-           "appId":data.content[0].appId,     //公众号名称，由商户传入     
-           "timeStamp": data.content[0].timeStamp,         //时间戳，自1970年以来的秒数     
-           "nonceStr": data.content[0].nonceStr, //随机串     
-           "package": data.content[0].package,     
-           "signType": data.content[0].signType,         //微信签名方式：     
-           "paySign": data.content[0].sign //微信签名 
-       },
-       function(res){     
-           if(res.err_msg == "get_brand_wcpay_request：ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-       }
-   ); 
-}
-
-
   $scope.submitPay = function (){
+    $ionicLoading.show({template: '微信安全支付中...'});
     var params = {
       "token":localStorage.token,
       "id":300006,
-      "price":0.1
+      "price":$scope.venue.price
     };
-    alert(angular.toJson(params));
 
     loadDataService.getJsapiPayInfo(params).success(function (data, status) {
-      $log.log("data : " + angular.toJson(data));
-      alert(angular.toJson(data));
-      wx.chooseWXPay({
-        timestamp: data.content[0].timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-        nonceStr: data.content[0].nonceStr, // 支付签名随机串，不长于 32 位
-        package: data.content[0].package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-        signType: data.content[0].signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-        paySign: data.content[0].sign, // 支付签名
-        success: function (res) {
-            // 支付成功后的回调函数
-            alert("支付成功");
+      $ionicLoading.hide();
+      if(data.status === 403){
+        alert("请先登录");
+        $state.go('tab.account');
+      }else{
+        if (typeof WeixinJSBridge == undefined){
+          if(document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+          }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
           }
-        });
+        }else{
+          onBridgeReady(data);
+        }
+      }
 
     });
       
@@ -370,12 +401,12 @@ angular.module('starter.controllers', [])
     var param = {
         code:access_code
     };
-    alert("param : " + angular.toJson(param));
+    // alert("param : " + angular.toJson(param));
     loadDataService.oauth2getAccessToken(param).success(function (data, status) {
 
           $ionicLoading.show({template: '努力登录中...'});
     
-          alert("response : " + angular.toJson(data));
+          // alert("response : " + angular.toJson(data));
           localStorage.openId = data.content[0].openId;
 
           //登录我们自己的服务器
@@ -388,10 +419,10 @@ angular.module('starter.controllers', [])
             smsCode : 1234
           };
 
-          alert("requset with data : " + angular.toJson(user));
+          // alert("requset with data : " + angular.toJson(user));
           loginService.login(angular.toJson(user)).success(function (response) {
 
-              alert("response: " + angular.toJson(response));
+              // alert("response: " + angular.toJson(response));
               localStorage.token = response.content[0].token;
               $scope.user.username = localStorage.username = response.content[0].token;
               $scope.user.phoneNum = localStorage.phoneNum = response.content[0].token;
@@ -408,11 +439,11 @@ angular.module('starter.controllers', [])
   }
 
   $scope.isLogined = function () {
-      alert("localStorage.openId : " + localStorage.openId);
+      // alert("localStorage.openId : " + localStorage.openId);
     // if(localStorage.token == undefined || localStorage.token == null){
     if(localStorage.openId == undefined || localStorage.openId == null){
       var currenturl=window.location.href;
-      alert("currenturl : "+currenturl);
+      // alert("currenturl : "+currenturl);
       window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
     }
   };
@@ -424,7 +455,7 @@ angular.module('starter.controllers', [])
     var token={
       token : localStorage.token
     }
-    alert("requset with data : " + angular.toJson(token));
+    // alert("requset with data : " + angular.toJson(token));
     loginService.logout(angular.toJson(token)).success(function (response) {
         $log.log("response : " + angular.toJson(response));
           localStorage.clear();

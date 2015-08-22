@@ -8,7 +8,6 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives'])
 
 .run(function ($ionicPlatform, $rootScope, $state, $stateParams, userService, loadDataService) {
-
   //WeChat init;
   var param = {
     "url":window.location.href
@@ -22,7 +21,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         timestamp: data.content[0].timestamp, // 必填，生成签名的时间戳
         nonceStr: data.content[0].noncestr, // 必填，生成签名的随机串
         signature: data.content[0].signature,// 必填，签名，见附录1
-        jsApiList: ['getLocation','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        jsApiList: ['getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       });
 
   }).error(function (data, status){
@@ -53,12 +52,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
      //通过微信获取地理位置
     wx.getLocation({
-      type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+      type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       success: function (res) {
-          localStorage.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-          localStorage.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+
+          // localStorage.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+          // localStorage.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
           // var speed = res.speed; // 速度，以米/每秒计
           // var accuracy = res.accuracy; // 位置精度
+          var location = gcj2bd(res.latitude, res.longitude);
+          // alert(location);
+          localStorage.latitude = location[0];
+          localStorage.longitude = location[1];
       }
     });
   });
@@ -191,6 +195,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $urlRouterProvider.otherwise('/tab/venues');
 
 });
+
+function gcj2bd(lat, lon) {
+  var pi = 3.14159265358979324;
+  var a = 6378245.0;
+  var ee = 0.00669342162296594323;
+  var x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+
+  var x = lon, y = lat;
+  var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
+  var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
+  var bd_lon = z * Math.cos(theta) + 0.0065;
+  var bd_lat = z * Math.sin(theta) + 0.006;
+  return [bd_lat, bd_lon];
+}
 
 var rootConfig = {
     "debug": true,

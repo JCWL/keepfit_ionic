@@ -14,31 +14,31 @@ angular.module('starter.directives', [])
       // zoomControl: "@",   // Whether to show a zoom control on the map.
       // scaleControl: "@",   // Whether to show scale control on the map.
       lng:"@",
-      lat:"@"
+      lat:"@",
     },
     link: function (scope, element, attrs) {
-    //   var map;
-    //   // 百度地图API功能
-    //   map = new BMap.Map("allMap");
-    //   map.addControl(new BMap.ZoomControl());
-    //   // 创建地址解析器实例
-    //    var myGeo = new BMap.Geocoder();
-    //   // 将地址解析结果显示在地图上,并调整地图视野
-    //   myGeo.getPoint(scope.address, function(point){
-    //     if (point) {
-    //       map.centerAndZoom(point, 16);
-    //       map.addOverlay(new BMap.Marker(point));
-    //     }
-    //   }, "");
 
-        var map = new BMap.Map("allMap");            // 创建Map实例
+        // var map = new BMap.Map("allMap");            // 创建Map实例
         // var point = new BMap.Point(scope.lng, scope.lat); // 创建点坐标
-        // map.centerAndZoom(point,15); 
-        var point = new BMap.Point(scope.lng, scope.lat); // 创建点坐标
-        map.centerAndZoom(point,scope.zoom);                 // 初始化地图,设置中心点坐标和地图级别。
-        map.addControl(new BMap.ZoomControl());      //添加地图缩放控件
-        var marker = new BMap.Marker(point);  //创建标注
-        map.addOverlay(marker);                 // 将标注添加到地图中
+        // map.centerAndZoom(point,scope.zoom);                 // 初始化地图,设置中心点坐标和地图级别。
+        // map.addControl(new BMap.ZoomControl());      //添加地图缩放控件
+        // var marker = new BMap.Marker(point);  //创建标注
+        // map.addOverlay(marker);                 // 将标注添加到地图中
+        var map = new BMap.Map("allMap");
+        map.centerAndZoom(new BMap.Point(scope.lng,scope.lat), scope.zoom);
+
+        var p1 = new BMap.Point(localStorage.longitude,localStorage.latitude);
+        var p2 = new BMap.Point(scope.lng,scope.lat);
+
+        var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+        driving.search(p1, p2);
+        // map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+
+        // var p1 = new BMap.Point(116.301934,39.977552);
+        // var p2 = new BMap.Point(116.508328,39.919141);
+
+        // var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+        // driving.search(p1, p2);
   }
 }
 });

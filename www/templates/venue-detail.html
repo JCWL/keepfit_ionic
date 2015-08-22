@@ -36,6 +36,8 @@ The Friends service returns an array of friend data
   <ion-item ui-sref="tab.map({venueId:venue.id})"><div class="icon ion-ios-location-outline">&nbsp;&nbsp;详细位置／距离</div></ion-item>
   <ion-item href="tel:{{venue.phone}}"><div class="icon ion-ios-telephone-outline">&nbsp;&nbsp;电话</div></ion-item>
 </ion-list>
+
+<!-- <button ng-click="openWechatMap()">微信地图</button> -->
 <!-- <div class="row">
   <div class="row">
     <div class="col-md-6">
@@ -55,7 +57,8 @@ The Friends service returns an array of friend data
 
 </ion-content>
   <div class="bar bar-footer" style="background-color:#ccc;padding-bottom:5px;margin-bottom:48px">
-    <div>{{venue.price | currency : "￥"}}</div>
+    <del>原价{{venue.originalPrice | currency : "￥"}}</del>&nbsp;&nbsp;&nbsp;&nbsp;
+    <div style="font-color:red">{{venue.price | currency : "￥"}}</div>
     <button class="button button-assertive pull-right" ui-sref="tab.placeOrder({venueId:venue.id})">
       现在预约
     </button>
