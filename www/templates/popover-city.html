@@ -1,0 +1,11 @@
+<ion-popover-view style="width:90%;height:300px;">
+    <ion-content style="height:300px">
+        <label class="item item-radio" ng-repeat="p in cities" ng-click="chooseCity(p.cityName,p.cityId)">
+            <input type="radio" name="groupDates">
+            <div class="item-content">
+              {{p.cityName}}
+            </div>
+            <i class="radio-icon ion-checkmark"></i>
+        </label>
+    </ion-content>
+</ion-popover-view>

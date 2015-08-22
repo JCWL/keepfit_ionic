@@ -1,6 +1,9 @@
 <ion-view view-title="场馆列表">
 
   <ion-content class="padding">  
+    <div class="bar-header" >
+        <a class="button button-icon icon ion-android-pin icon-top button-small button-clear button-balanced" ng-click="showpopovercity($event)">{{displayCity}}</a>
+    </div>
     <!-- 下拉列表 -->
     <div class="button-bar">
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopovertype($event)">{{queryCondition.typeName}}</a>

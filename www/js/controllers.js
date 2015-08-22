@@ -129,8 +129,21 @@ angular.module('starter.controllers', [])
       $log.log("response : " + angular.toJson(data));
 
       $scope.positions = data.content[0].areas;
+      $scope.displayCity = data.content[0].cityName;
       $scope.queryCondition.areaName = data.content[0].areas[0].areaName;
       $scope.queryCondition.areaId = data.content[0].areas[0].areaId;
+  });
+
+  // 初始化城市的数据
+  var param = {};
+  $log.log("request {/const/searchCity} with data : " + angular.toJson(param));
+  loadDataService.cities(param).success(function(data,status) {
+      $log.log("response.status :" + status);
+      $log.log("response :" + angular.toJson(data));
+
+      $scope.cities = data.content;
+      $scope.queryCondition.cityName  = data.content[0].name;
+      $scope.queryCondition.cityId = data.content[0].id;
   });
 
   // 选择种类时绑定函数
@@ -149,23 +162,51 @@ angular.module('starter.controllers', [])
       $log.log("choosen area : ", $scope.queryCondition.areaName, $scope.queryCondition.areaId);
   }
 
-  // 初始化三个popover
+  //切换位置时绑定函数
+  $scope.chooseCity= function(cityName, cityId){
+      $scope.queryCondition.cityName = cityName;
+      $scope.queryCondition.cityId = cityId;
+      $scope.popoverCity.hide();
+      $scope.displayCity = cityName;
+      $log.log("choose city :", $scope.queryCondition.cityName, $scope.queryCondition.cityId);
+
+      // 切换城市的数据
+      var param = {
+        "cityId" : $scope.queryCondition.cityId
+      };
+      $log.log("222222 :" + angular.toJson(param));
+      $log.log("requset {/const/searchByCity} with data : " + angular.toJson(param));
+      loadDataService.searchByCity(param).success(function(data,status){
+          $log.log("response.status :" + status);
+          $log.log("11111response :" + angular.toJson(data));
+
+          $scope.positions = data.content;
+          $scope.queryCondition.areaName = data.content[0].areaName;
+          $scope.queryCondition.areaId = data.content[0].areaId;
+      })
+}
+
+
+  // 初始化4个popover
   $ionicPopover.fromTemplateUrl('templates/popover-datetime.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popoverDatetime = popover;
   });
-
   $ionicPopover.fromTemplateUrl('templates/popover-type.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popoverType = popover;
   });
-
   $ionicPopover.fromTemplateUrl('templates/popover-position.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popoverPosition = popover;
+  });
+  $ionicPopover.fromTemplateUrl('templates/popover-city.html',{
+    scope: $scope
+  }).then(function(popover){
+    $scope.popoverCity = popover;
   });
 
   $scope.showpopoverdatetime = function ($event) {
@@ -176,6 +217,9 @@ angular.module('starter.controllers', [])
   }
   $scope.showpopoverposition = function ($event) {
       $scope.popoverPosition.show($event);
+  }
+  $scope.showpopovercity = function($event){
+      $scope.popoverCity.show($event);
   }
 
   // $scope.$on('$ionicView.enter', function(e) {

@@ -63,6 +63,14 @@ angular.module('starter.services', [])
             areas: function(param){
                 return doRequest(param, rootConfig.pathConfig.basePath  + '/const/searchAreaByLonLat');
             },
+            // 城市列表
+            cities: function(param){
+                return doRequest(param,rootConfig.pathConfig.basePath + '/const/searchCity');
+            },
+            // 确定城市
+            searchByCity: function(param){
+                return doRequest(param,rootConfig.pathConfig.basePath + '/const/searchByCity');
+            },
             // 注册用户
             register: function(phoneNum) {
               return doRequest(phoneNum, '')
