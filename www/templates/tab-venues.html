@@ -1,4 +1,4 @@
-<ion-view view-title="场馆列表">
+<ion-view view-title="找场馆">
 
   <ion-content class="padding">  
     <div class="bar-header" >
@@ -15,7 +15,7 @@
         <img class="full-image" ng-src="{{venue.logoPath}}" height="200px">
         <div class="row">
           <div class="col">{{venue.poiName}}</div>
-          <div class="col col-offset-70" style="text-align:right">{{venue.score}}星</div>
+          <div class="col col-offset-70" style="text-align:right; color:#61f0c9">{{venue.score}}星</div>
         </div>
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-location-outline"></i></div>
@@ -24,10 +24,10 @@
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-clock-outline"></i></div>
           <div class="col col-65">{{venue.openTime | date:'HH:mm'}}-{{venue.closeTime | date:'HH:mm'}}</div>
-          <div class="col col-25" style="text-align:right">{{venue.price | currency : "￥"}}</div>
+          <div class="col col-25" style="text-align:right; color:#61f0c9">{{venue.price | currency : "￥"}}</div>
         </div>
       </div>
     </div>
-    <ion-infinite-scroll on-infinite="loadMore()" distance="1%" ></ion-infinite-scroll>
+    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="10%" ></ion-infinite-scroll>
   </ion-content>
 </ion-view>

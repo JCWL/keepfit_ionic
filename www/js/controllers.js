@@ -79,10 +79,10 @@ angular.module('starter.controllers', [])
     queryDate : $scope.dates[0].queryDate,
     showTime : $scope.times[0].showTime,
     queryTime : $scope.times[0].queryTime,
-    typeName : '',
-    typeId : '',
-    areaName : '',
-    areaId : ''
+    typeName : null,
+    typeId : null,
+    areaName : null,
+    areaId : null
   }
 
   // 选择日期时间时绑定函数
@@ -112,7 +112,8 @@ angular.module('starter.controllers', [])
   loadDataService.types(param).success(function(data, status) {
       $log.log("response.status : " + status);
       $log.log("response : " + angular.toJson(data));
-
+      var obj = {"name":"全部类型","status":1};
+      data.content.unshift(obj);
       $scope.types = data.content;
       $scope.queryCondition.typeName = data.content[0].name;
       $scope.queryCondition.typeId = data.content[0].id;
@@ -125,9 +126,9 @@ angular.module('starter.controllers', [])
   };
   $log.log("requset {/const/searchAreaByLonLat} with data : " + angular.toJson(param));
   loadDataService.areas(param).success(function(data, status) {
-      $log.log("response.status : " + status);
       $log.log("response : " + angular.toJson(data));
-
+      var obj = {"areaName":"附近","cityId":"310100"};
+      data.content[0].areas.unshift(obj);
       $scope.positions = data.content[0].areas;
       $scope.displayCity = data.content[0].cityName;
       $scope.queryCondition.areaName = data.content[0].areas[0].areaName;
@@ -152,6 +153,10 @@ angular.module('starter.controllers', [])
       $scope.queryCondition.typeId = typeId;
       $scope.popoverType.hide();
       $log.log("choosen type : ", $scope.queryCondition.typeName, $scope.queryCondition.typeId);
+      $scope.currentPage = 0;
+      $scope.noMoreItemsAvailable = false;
+      $scope.venues = [];
+      $scope.loadMore();
   }
 
   // 选择种类时绑定函数
@@ -160,6 +165,10 @@ angular.module('starter.controllers', [])
       $scope.queryCondition.areaId = areaId;
       $scope.popoverPosition.hide();
       $log.log("choosen area : ", $scope.queryCondition.areaName, $scope.queryCondition.areaId);
+      $scope.currentPage = 0;
+      $scope.noMoreItemsAvailable = false;
+      $scope.venues = [];
+      $scope.loadMore();
   }
 
   //切换位置时绑定函数
@@ -174,12 +183,11 @@ angular.module('starter.controllers', [])
       var param = {
         "cityId" : $scope.queryCondition.cityId
       };
-      $log.log("222222 :" + angular.toJson(param));
       $log.log("requset {/const/searchByCity} with data : " + angular.toJson(param));
       loadDataService.searchByCity(param).success(function(data,status){
-          $log.log("response.status :" + status);
-          $log.log("11111response :" + angular.toJson(data));
-
+          $log.log("response.data :" + angular.toJson(data));
+          var obj = {"areaName":"附近","cityId":"310100"};
+          data.content.unshift(obj);
           $scope.positions = data.content;
           $scope.queryCondition.areaName = data.content[0].areaName;
           $scope.queryCondition.areaId = data.content[0].areaId;
@@ -221,51 +229,40 @@ angular.module('starter.controllers', [])
   $scope.showpopovercity = function($event){
       $scope.popoverCity.show($event);
   }
-
-  // $scope.$on('$ionicView.enter', function(e) {
-  // });
-  // loadDataService.venueList('ss').success(function (data, status) {
-  //     $scope.venues = data;
-  // });
   
-  var locInfo = {
-    "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
-    "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
-    "distance":10000
-  };
-
-  $log.log("requset {/venue/search} with data : " + angular.toJson(locInfo));
-  $ionicLoading.show({template: 'Loading...'});
-  loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
-      $scope.venues = data.content;
-      $log.log("response.status : " + status);
-      $log.log("response : " + angular.toJson(data));
-      $ionicLoading.hide();
-  });
+  $scope.currentPage = 0;
+  $scope.noMoreItemsAvailable = false;
+  $scope.venues = [];
 
   $scope.loadMore = function () {
+    $ionicLoading.show({template: 'Loading...'});
+    
+    var locInfo = {
+      "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
+      "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
+      "distance":500000,
+      "pageSize":3,
+      "venueType": $scope.queryCondition.typeId,
+      "areaId":$scope.queryCondition.areaId,
+      "currentPage": $scope.currentPage
+    };
+    $log.log("requset {/venue/search} with data : " + angular.toJson(locInfo));
     loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
+      $log.log("response.data : " + angular.toJson(data));
       $scope.venues = $scope.venues.concat(data.content);
-      $scope.$broadcast('scroll.infiniteScrollComplete');
+      $scope.contentLength = data.content.length;
+      $ionicLoading.hide();
+      $scope.currentPage++;
     });
-  }
-
+    $log.log("$scope.contentLength : " + $scope.contentLength);
+    if($scope.contentLength < 3){
+      $scope.noMoreItemsAvailable = true;
+    }
+    $scope.$broadcast('scroll.infiniteScrollComplete');
+  };
+  
 })
-
 .controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicLoading, loadDataService, settingsService) {
-
-
-  // $scope.openWechatMap = function(){
-  //   console.log("openWxMap...");
-  //   wx.openLocation({
-  //       latitude: 31.209962, // 纬度，浮点数，范围为90 ~ -90
-  //       longitude: 121.585696, // 经度，浮点数，范围为180 ~ -180。
-  //       name: '张江高科', // 位置名
-  //       address: '', // 地址详情说明
-  //       scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
-  //       infoUrl: 'www.baidu.com' // 在查看位置界面底部显示的超链接,可点击跳转
-  //   });
-  // }
 
   var params = {
     "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
@@ -568,36 +565,6 @@ angular.module('starter.controllers', [])
 // 注册用户
 .controller('RegisterCtrl', function ($log, $scope, $stateParams, $state, $ionicLoading, loadDataService, userService, loginService) {
     
-    // function GetQueryString(name) {  
-    //   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
-    //   var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
-    //   var context = "";  
-    //   if (r != null)  
-    //        context = r[2];  
-    //   reg = null;  
-    //   r = null;  
-    //   return context == null || context == "" || context == "undefined" ? "" : context;  
-    // }
-
-    // var access_code=GetQueryString('code');
-    // if (access_code==null || access_code==""){
-    //   var currenturl=window.location.href+"/register";
-    //   alert("currenturl : "+currenturl);
-    //   window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
-    // }else{
-    //   localStorage.accessCode = access_code;
-    //   var param = {
-    //     code:access_code
-    //   };
-    //   $log.log("param : " + angular.toJson(param));
-    //   loadDataService.oauth2getAccessToken(param).success(function (data, status) {
-    
-    //       $log.log("response.status : " + status);
-    //       alert("response : " + angular.toJson(data));
-    //       localStorage.openId = data.content[0].openId;
-    //   });
-    // }
-
     $scope.msg = {
       phoneNum : '' ,
       username : ''
