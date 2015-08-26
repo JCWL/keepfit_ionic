@@ -213,7 +213,7 @@ function gcj2bd(lat, lon) {
 var rootConfig = {
     "debug": true,
     "pathConfig": {
-        "basePath": "/jc"
+        "basePath": "http://120.26.115.196:8080/jc"
     },
     "currentVersion": "1.0"
 };
