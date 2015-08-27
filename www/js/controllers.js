@@ -423,6 +423,7 @@ angular.module('starter.controllers', [])
   $scope.user = {
     username : (localStorage.username == null)?"未登入":localStorage.username,
     phoneNum : localStorage.phoneNum,
+    photo : (localStorage.photo == null)?"img/ionic.png":localStorage.photo
   };
 
   function GetQueryString(name) {
@@ -442,40 +443,49 @@ angular.module('starter.controllers', [])
     var param = {
         code:access_code
     };
-    // alert("param : " + angular.toJson(param));
+    alert("param : " + angular.toJson(param));
     loadDataService.oauth2getAccessToken(param).success(function (data, status) {
 
-          $ionicLoading.show({template: '努力登录中...'});
+      alert("excute oauth2getAccessToken : " + angular.toJson(data));
+
+          // $ionicLoading.show({template: '努力登录中...'});
     
           // alert("response : " + angular.toJson(data));
-          localStorage.openId = data.content[0].openId;
+      localStorage.openId = data.content[0].openId;
+      $scope.user.username = localStorage.username = data.content[0].nickname;
+      $scope.user.phoneNum = localStorage.phoneNum = (data.content[0].city+"."+data.content[0].province);
+      $scope.user.photo = localStorage.photo = data.content[0].headImgUrl;
+      $scope.disable = false;
+      $scope.$digest();
 
           //登录我们自己的服务器
-          var user = {
-            phoneNum : 1234567890,
-            authLogoUrl : "",
-            clientType : 1,
-            code : localStorage.accessCode,
-            openId : localStorage.openId,
-            smsCode : 1234
-          };
+          // var user = {
+          //   phoneNum : 1234567890,
+          //   authLogoUrl : "",
+          //   clientType : 1,
+          //   code : localStorage.accessCode,
+          //   openId : localStorage.openId,
+          //   smsCode : 1234
+          // };
 
-          // alert("requset with data : " + angular.toJson(user));
-          loginService.login(angular.toJson(user)).success(function (response) {
+          // // alert("requset with data : " + angular.toJson(user));
+          // loginService.login(angular.toJson(user)).success(function (response) {
 
-              // alert("response: " + angular.toJson(response));
-              localStorage.token = response.content[0].token;
-              $scope.user.username = localStorage.username = response.content[0].token;
-              $scope.user.phoneNum = localStorage.phoneNum = response.content[0].token;
-              $scope.disable = false;
-              $ionicLoading.hide();
-              $scope.$digest();
-            }).error(function (response, status) {
-                alert("登录失败");
-                $ionicLoading.hide();
-          });
+          //     // alert("response: " + angular.toJson(response));
+          //     localStorage.token = response.content[0].token;
+          //     $scope.user.username = localStorage.username = response.content[0].token;
+          //     $scope.user.phoneNum = localStorage.phoneNum = response.content[0].token;
+          //     $scope.disable = false;
+          //     $ionicLoading.hide();
+          //     $scope.$digest();
+          //   }).error(function (response, status) {
+          //       alert("登录失败");
+          //       $ionicLoading.hide();
+          // });
           //登录我们自己的服务器结束
 
+      }).error(function(status){
+        alert("微信认证失败");
       });
   }
 
@@ -502,7 +512,8 @@ angular.module('starter.controllers', [])
           localStorage.clear();
           $scope.user = {
             username : '未登录',
-            phoneNum : ''
+            phoneNum : '',
+            photo: 'img/ionic.png'
           };
           $scope.disable = true;
           $ionicLoading.hide();

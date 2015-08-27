@@ -1,25 +1,32 @@
-<ion-view view-title="找场馆">
+
+<ion-view view-title="找场馆" cache-view ="true">
+  <ion-nav-buttons side="right">
+    <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
+  </ion-nav-buttons>
+  
+  <ion-nav-buttons side="left">
+    <a class="button button-icon icon ion-android-pin icon-top button-small button-clear button-balanced" ng-click="showpopovercity($event)">{{displayCity}}</a>
+  </ion-nav-buttons>
 
   <ion-content class="padding">  
-    <div class="bar-header" >
-        <a class="button button-icon icon ion-android-pin icon-top button-small button-clear button-balanced" ng-click="showpopovercity($event)">{{displayCity}}</a>
-    </div>
+    
     <!-- 下拉列表 -->
     <div class="button-bar">
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopovertype($event)">{{queryCondition.typeName}}</a>
       <a class="button icon-right ion-arrow-down-b" ng-click="showpopoverposition($event)">{{queryCondition.areaName}}</a>
+      <a class="button icon-right inn-arrow-down-b" ng-click="">预定次数</a>
     </div>
 
     <div class="list card" ng-repeat="venue in venues">
       <div class="item item-body" ui-sref="tab.venue-detail({venueId:venue.id})">
         <img class="full-image" ng-src="{{venue.logoPath}}" height="200px">
         <div class="row">
-          <div class="col">{{venue.poiName}}</div>
-          <div class="col col-offset-70" style="text-align:right; color:#61f0c9">{{venue.score}}星</div>
+          <div class="col" style="font-weight: bold; font-size: large; font-style: normal;">{{venue.poiName}}</div>
+          <div class="col col-offset-70" style="text-align:right; color:#000">{{venue.distance}}m</div>
         </div>
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-location-outline"></i></div>
-          <div class="col">{{venue.addr}}</div>
+          <div class="col" style="font-size: small; font-style: italic;">{{venue.addr}}</div>
         </div>
         <div class="row">
           <div class="col col-10"><i class="icon ion-ios-clock-outline"></i></div>
