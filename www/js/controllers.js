@@ -191,7 +191,27 @@ angular.module('starter.controllers', [])
           $scope.positions = data.content;
           $scope.queryCondition.areaName = data.content[0].areaName;
           $scope.queryCondition.areaId = data.content[0].areaId;
-      })
+      });
+
+      var cityInfo = {
+      "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
+      "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
+      "distance":500000,
+      "pageSize":3,
+      "venueType": $scope.queryCondition.typeId,
+      "areaId":$scope.queryCondition.areaId,
+      "currentPage": 0,
+      "cityId": $scope.queryCondition.cityId
+      };
+
+      $log.log("requset {/venue/search} with data : " + angular.toJson(cityInfo));
+      loadDataService.venueList(angular.toJson(cityInfo)).success(function (data, status) {
+      $log.log("response.data : " + angular.toJson(data));
+      $scope.venues = $scope.venues.concat(data.content);
+      $scope.contentLength = data.content.length;
+      $ionicLoading.hide();
+      $scope.currentPage++;
+    });
 }
 
 
@@ -244,7 +264,8 @@ angular.module('starter.controllers', [])
       "pageSize":3,
       "venueType": $scope.queryCondition.typeId,
       "areaId":$scope.queryCondition.areaId,
-      "currentPage": $scope.currentPage
+      "currentPage": $scope.currentPage,
+      "cityId": $scope.queryCondition.cityId
     };
     $log.log("requset {/venue/search} with data : " + angular.toJson(locInfo));
     loadDataService.venueList(angular.toJson(locInfo)).success(function (data, status) {
@@ -278,6 +299,7 @@ angular.module('starter.controllers', [])
       $log.log("response : " + angular.toJson(data));
 
       $scope.venue = data.content[0];
+      $scope.courses = data.content[0].courses;
       settingsService.set("venue", data.content[0]);
       $ionicLoading.hide();
   });
@@ -346,6 +368,52 @@ angular.module('starter.controllers', [])
 // 下订单
 .controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, $state, $ionicLoading, settingsService, loadDataService) {
 
+  var access_code=GetQueryString('code');
+  if (access_code!=null && access_code!=""){
+    localStorage.accessCode = access_code;
+    var param = {
+        code:access_code
+    };
+    alert("param : " + angular.toJson(param));
+    loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+
+      alert("excute oauth2getAccessToken : " + angular.toJson(data));
+          // $ionicLoading.show({template: '努力登录中...'});
+          // alert("response : " + angular.toJson(data));
+
+      localStorage.openId = data.content[0].openId;
+      //alert("openId: "+ localStorage.openId);  
+      // $scope.user.username = localStorage.username = data.content[0].nickname;
+      // $scope.user.phoneNum = localStorage.phoneNum = (data.content[0].city+"."+data.content[0].province);
+      // $scope.user.photo = localStorage.photo = data.content[0].headImgUrl;
+      $scope.disable = false;
+      $scope.$digest();
+
+      }).error(function(status){
+        alert("微信认证失败");
+      });
+  }else{
+      var currenturl=window.location.href;
+      window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";  
+  }
+
+  function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+    var context = "";  
+    if (r != null)  
+         context = r[2];  
+    reg = null;  
+    r = null;  
+    return context == null || context == "" || context == "undefined" ? "" : context;  
+  }
+
+
+
+
+
+
+
   function onBridgeReady(result){
     // alert("进入onBridgeReady函数，开始支付\n"+angular.toJson(result));
         WeixinJSBridge.invoke(
@@ -393,7 +461,7 @@ angular.module('starter.controllers', [])
       $ionicLoading.hide();
       if(data.status === 403){
         alert("请先登录");
-        $state.go('tab.account');
+        $state.go('tab.register');
       }else{
         if (typeof WeixinJSBridge == undefined){
           if(document.addEventListener ){

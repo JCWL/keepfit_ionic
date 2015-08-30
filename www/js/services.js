@@ -86,6 +86,10 @@ angular.module('starter.services', [])
             // 提交反馈信息
             postFeedback: function (argument) {
               // body...
+            },
+            // 获取课程列表
+            getCourses: function(param){
+                //....
             }
         };
     }
