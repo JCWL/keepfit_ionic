@@ -116,6 +116,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
+    .state('tab.course-detail', {
+      url: '/venues/:venueId',
+      views: {
+        'tab-venues': {
+          templateUrl: 'templates/course-detail.html',
+          controller: 'VenueDetailCtrl'
+        }
+      }
+    })
     .state('tab.schedule', {
       url: '/venues/:venueId/schedule',
       views: {
