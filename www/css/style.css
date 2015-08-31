@@ -1,8 +1,37 @@
-.fixed{
-    position:fixed;
-    right:0;
-    top:0;
-    border:1px solid red;
-    width:300px;
-    height:250px;
+@import url(http://fonts.googleapis.com/css?family=Roboto:100);
+body {
+  background: #C6FFE2;
+  color: white;
+  font-family: 'Roboto';
 }
+.wide-as-needed {
+  overflow: scroll;
+  white-space: nowrap;
+}
+.scroll { 
+  min-width: 100%;
+}
+.moveRight{
+  right:70px !important;
+}
+.has-header {
+  color:black;
+ 
+}
+.content-bar{
+ /* background-color:green;
+  margin-top:10px;
+  color:white;
+  margin-bottom:10px;*/
+  position: relative;
+  height: 30px;
+  margin-top:5px;
+  margin-bottom:5px;
+  background: #00ffff;
+  width: auto;
+  color:white;
+  font-size: 10px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+}
+

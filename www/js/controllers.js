@@ -304,7 +304,7 @@ angular.module('starter.controllers', [])
       $log.log("response : " + angular.toJson(data));
 
       $scope.venue = data.content[0];
-      $scope.courses = data.content[0].courses;
+      // $scope.courses = data.content[0].courses;
       settingsService.set("venue", data.content[0]);
       $ionicSlideBoxDelegate.update();
       $ionicLoading.hide();
