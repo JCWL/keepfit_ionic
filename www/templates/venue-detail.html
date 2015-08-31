@@ -6,11 +6,11 @@
           </ion-nav-buttons>
 
         <ion-content>
-          <ion-slide-box show-pager="false" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
+          <ion-slide-box show-pager="true" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
             <ion-slide ng-repeat="resource in venue.resources">
               <img ng-src="{{resource.path}}" style="margin:auto; height:250px">
               <!-- <div>
-                <p>{{resource.text}}</p>
+                <p>{{resource.id}}</p>
               </div> -->
             </ion-slide>
         </ion-slide-box>
@@ -19,10 +19,10 @@
 
             <ul class="nav nav-tabs" style="margin-bottom: 20px; margin-top: 10px; font-size: 20px;">
                 <li ng-tab-head="active">
-                    <a href="#" ng-click="$event.preventDefault()" style="text-decoration: blink;">简介</a>
+                    <a href="#" ng-click="$event.preventDefault()">简介</a>
                 </li>
                 <li ng-tab-head>
-                    <a href="#" ng-click="$event.preventDefault()" style="text-decoration: blink;">课程</a>
+                    <a href="#" ng-click="$event.preventDefault()">课程</a>
                 </li>
             </ul>
             <div class="tab-content" style="overflow: hidden">
@@ -55,7 +55,7 @@
                         <!-- <p style="text-align:right">11:00--12:30</p> -->
                         <h2>{{course.name}}</h2>
                         <p>{{course.introduce}}</p>
-                        <h3 style="text-align:right; color:#61f0c9">¥{{course.price}}</h3>
+                        <h3 style="color:#61f0c9">{{course.price | currency : "￥"}}</h3>
                       </a>
 
                     </ion-list>

@@ -193,25 +193,30 @@ angular.module('starter.controllers', [])
           $scope.queryCondition.areaId = data.content[0].areaId;
       });
 
-      var cityInfo = {
-      "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
-      "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
-      "distance":500000,
-      "pageSize":3,
-      "venueType": $scope.queryCondition.typeId,
-      "areaId":$scope.queryCondition.areaId,
-      "currentPage": 0,
-      "cityId": $scope.queryCondition.cityId
-      };
+      $scope.currentPage = 0;
+      $scope.noMoreItemsAvailable = false;
+      $scope.venues = [];
+      $scope.loadMore();
 
-      $log.log("requset {/venue/search} with data : " + angular.toJson(cityInfo));
-      loadDataService.venueList(angular.toJson(cityInfo)).success(function (data, status) {
-      $log.log("response.data : " + angular.toJson(data));
-      $scope.venues = $scope.venues.concat(data.content);
-      $scope.contentLength = data.content.length;
-      $ionicLoading.hide();
-      $scope.currentPage++;
-    });
+    //   var cityInfo = {
+    //   "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
+    //   "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
+    //   "distance":500000,
+    //   "pageSize":3,
+    //   "venueType": $scope.queryCondition.typeId,
+    //   "areaId":$scope.queryCondition.areaId,
+    //   "currentPage": 0,
+    //   "cityId": $scope.queryCondition.cityId
+    //   };
+
+    //   $log.log("requset {/venue/search} with data : " + angular.toJson(cityInfo));
+    //   loadDataService.venueList(angular.toJson(cityInfo)).success(function (data, status) {
+    //   $log.log("response.data : " + angular.toJson(data));
+    //   $scope.venues = $scope.venues.concat(data.content);
+    //   $scope.contentLength = data.content.length;
+    //   $ionicLoading.hide();
+    //   $scope.currentPage++;
+    // });
 }
 
 
@@ -283,7 +288,7 @@ angular.module('starter.controllers', [])
   };
   
 })
-.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicLoading, loadDataService, settingsService) {
+.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
 
   var params = {
     "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
@@ -301,6 +306,7 @@ angular.module('starter.controllers', [])
       $scope.venue = data.content[0];
       $scope.courses = data.content[0].courses;
       settingsService.set("venue", data.content[0]);
+      $ionicSlideBoxDelegate.update();
       $ionicLoading.hide();
   });
 })
