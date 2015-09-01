@@ -41,7 +41,7 @@
     </a>
   </ion-list>
 </ion-scroll> -->
-<ion-scroll direction="x" class="wide-as-needed" >
+<!-- <ion-scroll direction="x" class="wide-as-needed" >
                     <a class="button inline-button"><img src="img/ionic.png"></a>
                     <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
                     <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
@@ -65,10 +65,16 @@
 <div class ="" ng-repeat="course in courses">
   <a class="button inline-button"><img height="50" width="50" src="{{course.logoPath}}"></a>
 </div>
-</ion-scroll>
+</ion-scroll> -->
                  
 
-
+<div class="list list-inset">
+            <a class="item item-avatar" ui-sref="tab.vip-list">
+              <img src="{{vipPhoto}}">
+              <h2>{{vipName}}</h2>
+              <!-- <p>2年会员</p> -->
+            </a>
+        </div>
 
 
 

@@ -288,7 +288,7 @@ angular.module('starter.controllers', [])
   };
   
 })
-.controller('VenueDetailCtrl', function ($log, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
+.controller('VenueDetailCtrl', function ($log, $rootScope, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
 
   var params = {
     "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
@@ -310,8 +310,27 @@ angular.module('starter.controllers', [])
       $ionicSlideBoxDelegate.update();
       $ionicLoading.hide();
   });
+
+  var venue = settingsService.get("venue");
+  var param = {
+    "id" : venue.id
+  } ;
+  $log.log("venueId : " + angular.toJson(param)); 
+  $log.log("requset {/venue/searchVenueVip} with data : " + angular.toJson(param));
+  $ionicLoading.show({template: 'Loading...'});
+  loadDataService.searchVenueVip(param).success(function (data, status) {
+      $log.log("response.status : " + status);
+      $log.log("vip response :" + angular.toJson(data));
+      // $scope.venuevips = data.content;
+      //$scope.venueVips = $scope.venueVips.concat(data.content);
+      //$log.log("lcw :" + angular.toJson($scope.venueVips));
+      $rootScope.vipPhoto = data.content[0].smallIcon;
+      $rootScope.vipName = data.content[0].name;
+      $ionicLoading.hide();
+  });
+
 })
-.controller('VipListCtrl',function ($log, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
+.controller('VipListCtrl',function ($log, $rootScope, $state, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
 
   var venue = settingsService.get("venue");
   var param = {
@@ -328,6 +347,12 @@ angular.module('starter.controllers', [])
       //$log.log("lcw :" + angular.toJson($scope.venueVips));
       $ionicLoading.hide();
   });
+
+  $scope.chooseVip = function(vip) {
+    $rootScope.vipPhoto = vip.smallIcon;
+    $rootScope.vipName = vip.name;
+    $state.go("tab.course-detail");
+  }
 })
 
 

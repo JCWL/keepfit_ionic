@@ -5,7 +5,7 @@
 
   <ion-content class="tab-pane">
     <ion-list ng-repeat="venuevip in venuevips">
-      <a class="item item-avatar">
+      <a class="item item-avatar" ng-click="chooseVip(venuevip)">
         <img height="50" width="50" src="{{venuevip.smallIcon}}">
         <h2>{{venuevip.name}}</h2>
       </a>
