@@ -4659,7 +4659,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
   .item h2 {
     margin: 0 0 2px 0;
     font-size: 16px;
-    font-weight: normal; }
+    font-weight: normal;
+    margin-left: 50px; }
   .item h3 {
     margin: 0 0 4px 0;
     font-size: 14px; }
@@ -4672,7 +4673,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
   .item p {
     color: #666;
     font-size: 14px;
-    margin-bottom: 2px; }
+    margin-bottom: 2px;
+    margin-left: 50px; }
   .item h1:last-child, .item h2:last-child, .item h3:last-child, .item h4:last-child, .item h5:last-child, .item h6:last-child, .item p:last-child {
     margin-bottom: 0; }
   .item .badge {
@@ -5016,11 +5018,11 @@ a.item-content {
     position: absolute;
     top: 16px;
     left: 16px;
-    max-width: 40px;
-    max-height: 40px;
+    max-width: 100px;
+    max-height: 80px;
     width: 100%;
     height: 100%;
-    border-radius: 50%; }
+    border-radius: 15px;}
 
 .item-avatar-right, .item-avatar-right .item-content {
   padding-right: 72px;
@@ -5082,7 +5084,7 @@ a.item-content {
   text-overflow: inherit;
   white-space: normal; }
   .item-body h1, .item-body h2, .item-body h3, .item-body h4, .item-body h5, .item-body h6, .item-body p {
-    margin-top: 16px;
+    margin-top: 0px;
     margin-bottom: 16px; }
 
 .item-divider {

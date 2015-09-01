@@ -22,17 +22,17 @@
         <img class="full-image" ng-src="{{venue.logoPath}}" height="200px">
         <div class="row">
           <div class="col" style="font-weight: bold; font-size: large; font-style: normal;">{{venue.poiName}}</div>
-          <div class="col col-offset-70" style="text-align:right; color:#000">{{venue.distance/1000}}Km</div>
+         <div class="col col-offset-70" style="text-align:right; color:#000">{{venue.distance/1000}}Km</div>
         </div>
         <div class="row">
-          <div class="col col-10"><i class="icon ion-ios-location-outline"></i></div>
-          <div class="col" style="font-size: small; font-style: italic;">{{venue.addr}}</div>
+          <!-- <div class="col col-10"><i class="icon ion-ios-location-outline"></i></div> -->
+          <div class="col" style="font-size: small;">{{venue.addr}}</div>
         </div>
-        <div class="row">
+       <!--  <div class="row">
           <div class="col col-10"><i class="icon ion-ios-clock-outline"></i></div>
           <div class="col col-65">{{venue.openTime | date:'HH:mm'}}-{{venue.closeTime | date:'HH:mm'}}</div>
           <div class="col col-25" style="text-align:right; color:#61f0c9">{{venue.price | currency : "￥"}}</div>
-        </div>
+        </div> -->
       </div>
     </div>
     <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="10%" ></ion-infinite-scroll>

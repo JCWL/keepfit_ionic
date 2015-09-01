@@ -26,12 +26,11 @@
                 </li>
             </ul>
             <div class="tab-content" style="overflow: hidden">
+
                 <!-- 场馆简介 -->
                 <div ng-tab-body="animated bounceInUp" class="tab-pane">
-                    <ion-list>
-                        <ion-item class="list-group-item">仅剩<span class="label label-danger">{{venue.maxLimit}}</span>席|可容纳<span class="label label-default">{{venue.maxLimit}}</span>人</ion-item>
-                    </ion-list>
-                    <ion-list class="padding">
+                    <ion-list >
+                      <ion-item><h2>{{venue.name}}</h2></ion-item>
                       <ion-item ui-sref="tab.schedule({venueId:venue.id})"><div class="icon ion-ios-clock-outline">&nbsp;&nbsp;时间</div></ion-item>
                       <ion-item ui-sref="tab.map({venueId:venue.id})"><div class="icon ion-ios-location-outline">&nbsp;&nbsp;详细位置／距离</div></ion-item>
                       <ion-item href="tel:{{venue.phone}}"><div class="icon ion-ios-telephone-outline">&nbsp;&nbsp;电话</div></ion-item>
@@ -70,11 +69,11 @@
                     <ion-list ng-repeat="course in courses">
 
                       <a class="item item-avatar" ui-sref="tab.course-detail({venueId:venue.id})">
-                        <img src="img/ionic.png">
-                        <!-- <p style="text-align:right">11:00--12:30</p> -->
+                        <img src="{{course.logoPath}}">
+                        <p style="color:#61f0c9">11:00--12:30</p>
                         <h2>{{course.name}}</h2>
                         <p>{{course.introduce}}</p>
-                        <h3 style="color:#61f0c9">{{course.price | currency : "￥"}}</h3>
+                        <h2 style="color:#61f0c9">{{course.price | currency : "￥"}}</h2>
                       </a>
 
                     </ion-list>
