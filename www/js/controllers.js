@@ -304,9 +304,28 @@ angular.module('starter.controllers', [])
       $log.log("response : " + angular.toJson(data));
 
       $scope.venue = data.content[0];
-      // $scope.courses = data.content[0].courses;
+      $scope.venueId = data.content[0].id;
+      $scope.courses = data.content[0].courses;
       settingsService.set("venue", data.content[0]);
       $ionicSlideBoxDelegate.update();
+      $ionicLoading.hide();
+  });
+})
+.controller('VipListCtrl',function ($log, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
+
+  var venue = settingsService.get("venue");
+  var param = {
+    "id" : venue.id
+  } ;
+  $log.log("venueId : " + angular.toJson(param)); 
+  $log.log("requset {/venue/searchVenueVip} with data : " + angular.toJson(param));
+  $ionicLoading.show({template: 'Loading...'});
+  loadDataService.searchVenueVip(param).success(function (data, status) {
+      $log.log("response.status : " + status);
+      $log.log("vip response :" + angular.toJson(data));
+      $scope.venuevips = data.content;
+      //$scope.venueVips = $scope.venueVips.concat(data.content);
+      //$log.log("lcw :" + angular.toJson($scope.venueVips));
       $ionicLoading.hide();
   });
 })

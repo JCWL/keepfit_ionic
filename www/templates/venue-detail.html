@@ -47,27 +47,7 @@
                 <!-- 课程列表 --> 
                 <div ng-tab-body="animated bounceInUp" class="tab-pane">
 
-                  <ion-scroll direction="x" class="wide-as-needed">
-                    <a class="button inline-button"><img src="img/ionic.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                    <a class="button"><img src="http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png"></a>
-                 </ion-scroll>
-
                     <ion-list ng-repeat="course in courses">
-
                       <a class="item item-avatar" ui-sref="tab.course-detail({venueId:venue.id})">
                         <img src="{{course.logoPath}}">
                         <p style="color:#61f0c9">11:00--12:30</p>
@@ -75,7 +55,6 @@
                         <p>{{course.introduce}}</p>
                         <h2 style="color:#61f0c9">{{course.price | currency : "￥"}}</h2>
                       </a>
-
                     </ion-list>
 
                 </div>

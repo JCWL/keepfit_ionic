@@ -125,6 +125,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
+    .state('tab.vip-list', {
+      url: '/course/:courseId',
+      views: {
+        'tab-venues': {
+          templateUrl: 'templates/vip-list.html',
+          controller: 'VipListCtrl'
+        }
+      }
+    })
     .state('tab.schedule', {
       url: '/venues/:venueId/schedule',
       views: {
@@ -222,8 +231,8 @@ function gcj2bd(lat, lon) {
 var rootConfig = {
     "debug": true,
     "pathConfig": {
-        "basePath": "http://120.26.115.196:8080/jc"
-        // "basePath": "/jc"
+        //"basePath": "http://120.26.115.196:8080/jc"
+        "basePath": "/jc"
     },
     "currentVersion": "1.0"
 };

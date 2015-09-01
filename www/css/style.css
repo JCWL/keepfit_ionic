@@ -1,9 +1,9 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:100);
+/*@import url(http://fonts.googleapis.com/css?family=Roboto:100);
 body {
   background: #C6FFE2;
   color: white;
   font-family: 'Roboto';
-}
+}*/
 .wide-as-needed {
   overflow: scroll;
   white-space: nowrap;
@@ -24,7 +24,7 @@ body {
   color:white;
   margin-bottom:10px;*/
   position: relative;
-  height: 30px;
+  height: 10px;
   margin-top:5px;
   margin-bottom:5px;
   background: #00ffff;

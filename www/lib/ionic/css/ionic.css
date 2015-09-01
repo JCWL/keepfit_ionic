@@ -6543,8 +6543,8 @@ progress {
   display: inline-block;
   margin: 0;
   padding: 0 12px;
-  min-width: 52px;
-  min-height: 47px;
+  min-width: 12px;
+  min-height: 17px;
   border-width: 1px;
   border-style: solid;
   border-radius: 2px;
@@ -6552,7 +6552,7 @@ progress {
   text-align: center;
   text-overflow: ellipsis;
   font-size: 14px;
-  line-height: 42px;
+  line-height: 12px;
   cursor: pointer; }
   .button:hover {
     color: #444;

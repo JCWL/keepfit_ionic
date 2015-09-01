@@ -71,6 +71,10 @@ angular.module('starter.services', [])
             searchByCity: function(param){
                 return doRequest(param,rootConfig.pathConfig.basePath + '/const/searchByCity');
             },
+            // 查询年卡会员
+            searchVenueVip: function(param){
+                return doRequest(param,rootConfig.pathConfig.basePath + '/venue/searchVenueVip');
+            },
             // 注册用户
             register: function(phoneNum) {
               return doRequest(phoneNum, '')
