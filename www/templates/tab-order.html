@@ -6,8 +6,8 @@
         <div class="list list-inset">
 
             <div class="item item-thumbnail-left">
-              <img ng-src="{{venue.logoPath}}">
-              <h2>名称：{{venue.name}}</h2>
+              <img ng-src="{{course.logoPath}}">
+              <h2>名称：{{course.name}}</h2>
               <h2>时间：{{venue.openTime | date:'yyyy-MM-dd (HH:mm'}}-{{venue.closeTime | date:'HH:mm)'}}</h2>
             </div>
 
@@ -15,7 +15,7 @@
                 地点：{{venue.addr}}
             </div>
 
-            <div class="item">价格：{{venue.price | currency : "￥"}}&nbsp;&nbsp;&nbsp;&nbsp;<del>原价：{{venue.originalPrice | currency : "￥"}}</del></div> 
+            <div class="item">价格：{{course.price | currency : "￥"}}&nbsp;&nbsp;&nbsp;&nbsp;<del>原价：{{course.originalPrice | currency : "￥"}}</del></div> 
   
             <div class="item">
                 <label class="item item-input item-stacked-label">

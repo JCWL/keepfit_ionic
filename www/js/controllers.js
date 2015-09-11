@@ -287,6 +287,39 @@ angular.module('starter.controllers', [])
     $scope.$broadcast('scroll.infiniteScrollComplete');
   };
   
+  //微信登录验证
+  // var access_code=GetQueryString('code');
+  // if (access_code!=null && access_code!=""){
+  //   localStorage.accessCode = access_code;
+  //   var param = {
+  //       code:access_code
+  //   };
+  //   //alert("param : " + angular.toJson(param));
+  //   loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+  //     //alert("excute oauth2getAccessToken : " + angular.toJson(data));
+  //     localStorage.openId = data.content[0].openId;
+  //     $scope.disable = false;
+  //     $scope.$digest();
+
+  //     }).error(function(status){
+  //       alert("微信认证失败");
+  //     });
+  // }else{
+  //     var currenturl=window.location.href;
+  //     window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";  
+  // }
+
+  function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+    var context = "";  
+    if (r != null)  
+         context = r[2];  
+    reg = null;  
+    r = null;  
+    return context == null || context == "" || context == "undefined" ? "" : context;  
+  }
+  
 })
 .controller('VenueDetailCtrl', function ($log, $rootScope, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
 
@@ -304,7 +337,7 @@ angular.module('starter.controllers', [])
       $log.log("response : " + angular.toJson(data));
 
       $scope.venue = data.content[0];
-      $scope.venueId = data.content[0].id;
+      //$scope.venueId = data.content[0].id;
       $scope.courses = data.content[0].courses;
       settingsService.set("venue", data.content[0]);
       $ionicSlideBoxDelegate.update();
@@ -321,16 +354,30 @@ angular.module('starter.controllers', [])
   loadDataService.searchVenueVip(param).success(function (data, status) {
       $log.log("response.status : " + status);
       $log.log("vip response :" + angular.toJson(data));
-      // $scope.venuevips = data.content;
+      $scope.venuevips = data.content;
       //$scope.venueVips = $scope.venueVips.concat(data.content);
       //$log.log("lcw :" + angular.toJson($scope.venueVips));
-      $rootScope.vipPhoto = data.content[0].smallIcon;
-      $rootScope.vipName = data.content[0].name;
+      //$rootScope.vipPhoto = data.content[0].smallIcon;
+      //$rootScope.vipName = data.content[0].name;
       $ionicLoading.hide();
   });
 
 })
-.controller('VipListCtrl',function ($log, $rootScope, $state, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
+.controller('CourseDetailCtrl',function ($log, $rootScope, $ionicPopover, $state, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService){
+  var venue = settingsService.get("venue");
+  var param = {
+      "id" : $stateParams.courseId
+  };
+  $log.log("courseId : " + angular.toJson(param)); 
+  $log.log("requset {/course/searchById} with data : " + angular.toJson(param));
+  loadDataService.searchVenueCourse(param).success(function (data, status) {
+    $log.log("response.status : " + status);
+    $log.log("course response :" + angular.toJson(data));
+    $scope.course = data.content[0];
+    $scope.venue = data.content[0].venue;
+    settingsService.set("course", data.content[0]);
+    $ionicLoading.hide();
+  });
 
   var venue = settingsService.get("venue");
   var param = {
@@ -342,18 +389,57 @@ angular.module('starter.controllers', [])
   loadDataService.searchVenueVip(param).success(function (data, status) {
       $log.log("response.status : " + status);
       $log.log("vip response :" + angular.toJson(data));
-      $scope.venuevips = data.content;
+      if (data.content.length != 0) {
+        $scope.venuevips = data.content;
+        $rootScope.vipPhoto = data.content[0].smallIcon;
+        // $rootScope.vipPhoto111 = new Array[5];
+        // $scope.vipPhoto111[0] = data.content[0];
+      };
+      
       //$scope.venueVips = $scope.venueVips.concat(data.content);
       //$log.log("lcw :" + angular.toJson($scope.venueVips));
+      //$rootScope.vipPhoto = data.content[0].smallIcon;
+      //$rootScope.vipName = data.content[0].name;
       $ionicLoading.hide();
   });
+  //
+  $ionicPopover.fromTemplateUrl('templates/vip-list.html', {
+    scope: $scope
+  }).then(function(popover) {
+    $scope.popoverViplist= popover;
+  });
+
+  $scope.showpopoverViplist = function ($event) {
+      $scope.popoverViplist.show($event);
+  }
 
   $scope.chooseVip = function(vip) {
     $rootScope.vipPhoto = vip.smallIcon;
     $rootScope.vipName = vip.name;
-    $state.go("tab.course-detail");
+    $scope.popoverViplist.hide();
+    //$state.go("tab.course-detail");
   }
 })
+// .controller('VipListCtrl',function ($log, $rootScope, $state, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
+
+//   var venue = settingsService.get("venue");
+//   var param = {
+//     "id" : venue.id
+//   } ;
+//   $log.log("venueId : " + angular.toJson(param)); 
+//   $log.log("requset {/venue/searchVenueVip} with data : " + angular.toJson(param));
+//   $ionicLoading.show({template: 'Loading...'});
+//   loadDataService.searchVenueVip(param).success(function (data, status) {
+//       $log.log("response.status : " + status);
+//       $log.log("vip response :" + angular.toJson(data));
+//       $scope.venuevips = data.content;
+//       //$scope.venueVips = $scope.venueVips.concat(data.content);
+//       //$log.log("lcw :" + angular.toJson($scope.venueVips));
+//       $ionicLoading.hide();
+//   });
+
+  
+// })
 
 
 .controller('VenueScheduleCtrl', function ($log, $scope, $stateParams, $ionicLoading, settingsService) {
@@ -418,52 +504,58 @@ angular.module('starter.controllers', [])
 // 下订单
 .controller('PlaceOrderCtrl', function ($log, $scope, $stateParams, $state, $ionicLoading, settingsService, loadDataService) {
 
-  var access_code=GetQueryString('code');
-  if (access_code!=null && access_code!=""){
-    localStorage.accessCode = access_code;
-    var param = {
-        code:access_code
-    };
-    alert("param : " + angular.toJson(param));
-    loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+  var venue = settingsService.get("venue");
+  var param = {
+      "id" : $stateParams.courseId
+  };
+  $log.log("courseId : " + angular.toJson(param)); 
+  $log.log("requset {/course/searchById} with data : " + angular.toJson(param));
+  loadDataService.searchVenueCourse(param).success(function (data, status) {
+    $log.log("response.status : " + status);
+    $log.log("course response :" + angular.toJson(data));
+    $scope.course = data.content[0];
+    $scope.venue = data.content[0].venue;
+    $ionicLoading.hide();
+  });
+  // var access_code=GetQueryString('code');
+  // if (access_code!=null && access_code!=""){
+  //   localStorage.accessCode = access_code;
+  //   var param = {
+  //       code:access_code
+  //   };
+  //   alert("param : " + angular.toJson(param));
+  //   loadDataService.oauth2getAccessToken(param).success(function (data, status) {
 
-      alert("excute oauth2getAccessToken : " + angular.toJson(data));
-          // $ionicLoading.show({template: '努力登录中...'});
-          // alert("response : " + angular.toJson(data));
+  //     alert("excute oauth2getAccessToken : " + angular.toJson(data));
+  //         // $ionicLoading.show({template: '努力登录中...'});
+  //         // alert("response : " + angular.toJson(data));
 
-      localStorage.openId = data.content[0].openId;
-      //alert("openId: "+ localStorage.openId);  
-      // $scope.user.username = localStorage.username = data.content[0].nickname;
-      // $scope.user.phoneNum = localStorage.phoneNum = (data.content[0].city+"."+data.content[0].province);
-      // $scope.user.photo = localStorage.photo = data.content[0].headImgUrl;
-      $scope.disable = false;
-      $scope.$digest();
+  //     localStorage.openId = data.content[0].openId;
+  //     //alert("openId: "+ localStorage.openId);  
+  //     // $scope.user.username = localStorage.username = data.content[0].nickname;
+  //     // $scope.user.phoneNum = localStorage.phoneNum = (data.content[0].city+"."+data.content[0].province);
+  //     // $scope.user.photo = localStorage.photo = data.content[0].headImgUrl;
+  //     $scope.disable = false;
+  //     $scope.$digest();
 
-      }).error(function(status){
-        alert("微信认证失败");
-      });
-  }else{
-      var currenturl=window.location.href;
-      window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";  
-  }
+  //     }).error(function(status){
+  //       alert("微信认证失败");
+  //     });
+  // }else{
+  //     var currenturl=window.location.href;
+  //     window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";  
+  // }
 
-  function GetQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
-    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
-    var context = "";  
-    if (r != null)  
-         context = r[2];  
-    reg = null;  
-    r = null;  
-    return context == null || context == "" || context == "undefined" ? "" : context;  
-  }
-
-
-
-
-
-
-
+  // function GetQueryString(name) {
+  //   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+  //   var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+  //   var context = "";  
+  //   if (r != null)  
+  //        context = r[2];  
+  //   reg = null;  
+  //   r = null;  
+  //   return context == null || context == "" || context == "undefined" ? "" : context;  
+  // }
   function onBridgeReady(result){
     // alert("进入onBridgeReady函数，开始支付\n"+angular.toJson(result));
         WeixinJSBridge.invoke(
@@ -487,6 +579,8 @@ angular.module('starter.controllers', [])
                 break;
               case 'get_brand_wcpay_request:ok':
                 alert('支付成功！');
+                insertOrder();
+                $state.go('tab.orders');
                 break;
               default:
                 alert(JSON.stringify(res));
@@ -496,23 +590,34 @@ angular.module('starter.controllers', [])
            }
          );
        }
-
   $scope.venue = settingsService.get("venue");
-
   $scope.submitPay = function (){
     $ionicLoading.show({template: '微信安全支付中...'});
     var params = {
       "token":localStorage.token,
       "id":300006,
       "price":$scope.venue.price
-    };
-
+    };   
     loadDataService.getJsapiPayInfo(params).success(function (data, status) {
       $ionicLoading.hide();
-      if(data.status === 403){
+      var param = localStorage.token;
+        alert("token :" + angular.toJson(param));
+      if(param == null || param ==""){
         alert("请先登录");
         $state.go('tab.register');
       }else{
+        //alert("查询电话号码");
+        loadDataService.getPhoneNumByToken(param).success(function (data, status) {
+          alert("phoneNum  : " + angular.toJson(data));
+          $scope.phoneNum = data.content[0];
+        })
+      }
+     
+      if(data.status === 403){
+        alert("token 已经过期 请重新登录");
+        $state.go('tab.register');
+      }else{
+        
         if (typeof WeixinJSBridge == undefined){
           if(document.addEventListener ){
             document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
@@ -521,18 +626,40 @@ angular.module('starter.controllers', [])
             document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
           }
         }else{
+          alert("微信支付！")
           onBridgeReady(data);
+          alert("插入订单！")
         }
       }
-
     });
-      
+  }
+
+  var venue = settingsService.get("venue");
+  var course = settingsService.get("course");
+  function insertOrder() {
+    var params = {
+      "token" : localStorage.token,
+      "toUid" : course.id,
+      "orderType" : 3,
+      "actualPrice" : course.price
+    }
+    alert("params: " + angular.toJson(params));
+    loadDataService.insertorder(params).success(function(data, status){
+        alert("response.status : " + status);
+        if(response.status === 200){
+              alert("status  is 200  turn into orsers:" + status);
+              $state.go('tab.orders');
+            }else{
+              alert(response.msgs.fail);
+            }
+        $ionicLoading.hide();
+    })
   }
 })
 
 .controller('AccountCtrl', function ($scope, $state, $log, $ionicLoading, userService, loginService, loadDataService) {
 
-  if(localStorage.openId == undefined || localStorage.openId == null){
+  if(localStorage.token == undefined || localStorage.token == null){
     $scope.disable = true;
   }else{
     $scope.disable = false;
@@ -610,11 +737,11 @@ angular.module('starter.controllers', [])
   $scope.isLogined = function () {
       // alert("localStorage.openId : " + localStorage.openId);
     // if(localStorage.token == undefined || localStorage.token == null){
-    if(localStorage.openId == undefined || localStorage.openId == null){
-      var currenturl=window.location.href;
-      // alert("currenturl : "+currenturl);
-      window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
-    }
+    // if(localStorage.openId == undefined || localStorage.openId == null){
+    //   var currenturl=window.location.href;
+    //   // alert("currenturl : "+currenturl);
+    //   window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+    // }
   };
 
   $scope.logout = function () {
@@ -644,6 +771,13 @@ angular.module('starter.controllers', [])
     });
   }
 
+  $scope.goLogin = function(){
+    if(localStorage.openId == undefined || localStorage.openId == null){
+       alert("没有通过微信验证！！");
+    }else{
+      $state.go('tab.register');
+    }
+  }
   $scope.goOrders = function() {
     //  进入订单列表
     if(localStorage.token == 'undefine' || localStorage.token == null){
@@ -676,9 +810,20 @@ angular.module('starter.controllers', [])
 
 })
 // 订单
-.controller('OrderCtrl', function ($log, $scope, $stateParams) {
+.controller('OrderCtrl', function ($log, $scope, $stateParams, loginService, loadDataService) {
   // $scope.venue = Chats.get($stateParams.venueId);
-  
+  var param = {
+      "token" : localStorage.token
+    }
+  loadDataService.getorders(param).success(function(data, status){
+        alert("response.status : " + status);
+        alert("getorders response :" + angular.toJson(data));
+        $scope.orders = data.content;
+        $scope.venue = data.content.venue;
+        $scope.course = data.content.course;
+        //$scope.orders = $scope.orders.concat(data.content[0]);
+        $ionicLoading.hide();
+    })
 })
 // 优惠券
 .controller('CouponCtrl', function($scope, $stateParams) {
@@ -715,6 +860,7 @@ angular.module('starter.controllers', [])
           smsCode : $scope.msg.verifyCode
         };
 
+        alert("lcwww : " + angular.toJson(user));
         $log.log("requset with data : " + angular.toJson(user));
         loginService.login(angular.toJson(user)).success(function (response) {
 

@@ -71,17 +71,35 @@ angular.module('starter.services', [])
             searchByCity: function(param){
                 return doRequest(param,rootConfig.pathConfig.basePath + '/const/searchByCity');
             },
-            // 查询年卡会员
+            // 查询年卡会员列表
             searchVenueVip: function(param){
                 return doRequest(param,rootConfig.pathConfig.basePath + '/venue/searchVenueVip');
             },
+            // 查询单个课程详情
+            searchVenueCourse: function(param){
+                return doRequest(param,rootConfig.pathConfig.basePath + '/course/searchById');
+            },
             // 注册用户
-            register: function(phoneNum) {
-              return doRequest(phoneNum, '')
+            // register: function(phoneNum) {
+            //   return doRequest(phoneNum, '')
+            // },
+            // 插入订单
+            insertorder: function(params){
+                alert("insertorder:" + "function");
+            var promise = $http.post(rootConfig.pathConfig.basePath + '/order/insertOrder', params).success(function (response) {
+                
+                return response;
+            }).error(function (response, status) {
+                
+                console.log("response:" + response + ",status:" + status);
+                return status;
+            });
+            return promise;
+                //return doRequest(param,rootConfig.pathConfig.basePath + '/order/insertOrder');
             },
             // 获取订单
-            getorders: function(argument) {
-
+            getorders: function(param) {
+                return doRequest(param,rootConfig.pathConfig.basePath + '/order/myOrder');
             },
             // 获取优惠券
             getcoupons: function (argument) {
@@ -94,6 +112,10 @@ angular.module('starter.services', [])
             // 获取课程列表
             getCourses: function(param){
                 //....
+            },
+            //查询手机号码
+            getPhoneNumByToken: function(param){
+                return doRequest(param,rootConfig.pathConfig.basePath + '/user/myData');
             }
         };
     }
@@ -126,6 +148,17 @@ angular.module('starter.services', [])
             return promise;
         },
 
+        // insertorder: function (params) {
+        //     alert("跳到这里了!");
+        //     var promise = $http.post(rootConfig.pathConfig.basePath + '/order/insertOrder', params).success(function (response) {
+        //         return response;
+        //     }).error(function (response, status){
+        //         console.log("response:" + response + ",status:" + status);
+        //         return status;
+        //     });
+        //     return promise;
+        // }
+
         sendSms: function (registInfo) {
 
           var promise = $http.post(rootConfig.pathConfig.basePath + '/comm/sendSms', registInfo).success(function (response) {
@@ -138,6 +171,17 @@ angular.module('starter.services', [])
             });
             return promise;
 
+        },
+
+        getPhoneNumByToken: function(token) {
+            var promise = $http.post(rootConfig.pathConfig.basePath + '/user/myData', token).success(function (response) {
+                console.log("response.status : " + response.status);
+                return response;
+            }).error(function (response, status){
+                console.log("response:" + response + ", status:" + status);
+                return status;
+            });
+            return promise;
         }
     };
     return loginService;

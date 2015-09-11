@@ -1,16 +1,40 @@
-<ion-view view-title="健身房会员">
-  <ion-nav-buttons side="right">
+<ion-popover-view style="width:100%;height:500px;">
+  <!-- <ion-nav-buttons side="right">
     <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
-  </ion-nav-buttons>
+  </ion-nav-buttons> -->
 
-  <ion-content class="tab-pane">
-    <ion-list ng-repeat="venuevip in venuevips">
-      <a class="item item-avatar" ng-click="chooseVip(venuevip)">
-        <img height="50" width="50" src="{{venuevip.smallIcon}}">
-        <h2>{{venuevip.name}}</h2>
-      </a>
-    </ion-list>   
+  <ion-content>
+        
+        <ion-list >
+            <a class="item item-icon-left" style="background-color:#f6f301" href="#">
+                <h>健身房年卡会员的优惠特权<h>
+                <li><h>选择会员，使用他的优惠特权体验私教课程</h></li>
+                <li><h>会员的优惠都一样，不过您的选择会决定哪个会员会得到一定的奖励</h></li>
+                <li><h>通过“悦健”健身平台成为健身会员将会享受更多的优惠</h></li>
+            </a>
+        </ion-list>
+          <!--   <ion-list ng-repeat="venuevip in venuevips">
+              <label class="item item-radio">
+               <a class="item item-avatar">
+                  <img style="top:5px;max-width:60px;max-height:60px;border-radius:100px" src="{{venuevip.smallIcon}}">
+                  <p style="margin-left:30px;margin-top:10px">{{venuevip.name}}</p>
+                  <i class="radio-icon icon-checkmark"></i>
+               </a>
+              </label>
+            </ion-list> -->
+     <ion-list ng-repeat="venuevip in venuevips" ng-click="chooseVip(venuevip)">
+          <label class="item item-radio" >
+           <input type="radio" name="group">
+            <a class="item item-avatar" >
+               <img style="top:5px;max-width:60px;max-height:60px;border-radius:100px" src="{{venuevip.smallIcon}}">
+               <p style="margin-left:30px;margin-top:10px">{{venuevip.name}}</p>
+            </a>
+            <i class="radio-icon ion-checkmark"></i>
+           </input>
+          </label>
+        </ion-list>
 
-  </ion-content>
-  
-</ion-view>
+    </ion-content>
+    
+
+</ion-popover-view>

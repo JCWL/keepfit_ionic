@@ -1,21 +1,27 @@
 <ion-view view-title="我的订单">
     <ion-content>
-        
-        <div class="list list-inset">
-            <a class="item item-icon-left" href="#">
-                <i class="icon ion-document-text"></i>
-                我的订单1
-            </a>
+        <!-- <div class="list card" ng-repeat="order in orders">
+          <a class="item item-avatar" ui-sref="tab.order-detail({orderId:order.id})">
+            <p>11:00--12:30</p>
+            <p>{{order.id}}</p>
+            <p>{{order.actualPrice}}</p>
+          </a>
+        </div> -->
 
-            <a class="item item-icon-left" href="#">
-                <i class="icon ion-document-text"></i>
-                我的订单2
-            </a>
+        <div class="tab-pane">
 
-            <a class="item item-icon-left" href="#">
-                <i class="icon ion-document-text"></i>
-                我的订单3
-            </a>
+            <ion-list ng-repeat="order in orders">
+              <a class="item item-avatar" ui-sref="tab.order-detail({orderId:order.id})">
+                <img src="{{order.course.logoPath}}">
+                <p style="color:#61f0c9">{{order.venue.name}}</p>
+                <p>{{order.id}}</p>
+                <h2>{{order.course.name}}</h2>
+                <p>{{order.course.introduce}}</p>
+                <h2 style="color:#61f0c9">{{order.course.price | currency : "￥"}}</h2>
+              </a>
+            </ion-list>
+
         </div>
+
     </ion-content>
 </ion-view>

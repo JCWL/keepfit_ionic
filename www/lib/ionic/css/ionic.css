@@ -4675,6 +4675,11 @@ ion-tabs.tabs-color-active-dark .tab-item {
     font-size: 14px;
     margin-bottom: 2px;
     margin-left: 50px; }
+  .item h6 {
+    color: #666;
+    font-size: 1px;
+    margin-bottom: 2px;
+    margin-left: 0px; }
   .item h1:last-child, .item h2:last-child, .item h3:last-child, .item h4:last-child, .item h5:last-child, .item h6:last-child, .item p:last-child {
     margin-bottom: 0; }
   .item .badge {
@@ -5084,7 +5089,7 @@ a.item-content {
   text-overflow: inherit;
   white-space: normal; }
   .item-body h1, .item-body h2, .item-body h3, .item-body h4, .item-body h5, .item-body h6, .item-body p {
-    margin-top: 0px;
+    margin-top: 16px;
     margin-bottom: 16px; }
 
 .item-divider {
@@ -6242,13 +6247,14 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 .item-radio .radio-icon {
   /* checkmark icon will be hidden by default */
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 8px;
+  right: 32px;
   z-index: 3;
   visibility: hidden;
   padding: 14px;
   height: 100%;
-  font-size: 24px; }
+  font-size: 24px;
+  color: #0fd03e; }
 
 .item-radio input {
   /* hide any radio button inputs elements (the ugly circles) */
@@ -6543,8 +6549,8 @@ progress {
   display: inline-block;
   margin: 0;
   padding: 0 12px;
-  min-width: 12px;
-  min-height: 17px;
+  min-width: 52px;
+  min-height: 47px;
   border-width: 1px;
   border-style: solid;
   border-radius: 2px;
@@ -6552,7 +6558,7 @@ progress {
   text-align: center;
   text-overflow: ellipsis;
   font-size: 14px;
-  line-height: 12px;
+  line-height: 42px;
   cursor: pointer; }
   .button:hover {
     color: #444;

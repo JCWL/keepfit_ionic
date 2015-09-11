@@ -71,7 +71,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
-  $ionicConfigProvider.tabs.position("bottom");
+  // $ionicConfigProvider.tabs.position("bottom");
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -117,11 +117,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.course-detail', {
-      url: '/venues/:venueId',
+      url: '/course/:courseId',
       views: {
         'tab-venues': {
           templateUrl: 'templates/course-detail.html',
-          controller: 'VenueDetailCtrl'
+          controller: 'CourseDetailCtrl'
         }
       }
     })
@@ -153,7 +153,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.placeOrder', {
-      url: '/venues/:venueId/placeorder',
+      url: '/course/:courseId/placeorder',
       views: {
         'tab-venues': {
           templateUrl: 'templates/tab-order.html',
@@ -211,6 +211,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/venues');
+  // $urlRouterProvider.otherwise('/venues');
 
 });
 
@@ -229,10 +230,10 @@ function gcj2bd(lat, lon) {
 }
 
 var rootConfig = {
-    "debug": true,
+    "debug": false,
     "pathConfig": {
-        "basePath": "http://120.26.115.196:8080/jc"
-        // "basePath": "/jc"
+        //"basePath": "http://120.26.115.196:8080/jc"
+        "basePath": "/jc"
     },
     "currentVersion": "1.0"
 };
