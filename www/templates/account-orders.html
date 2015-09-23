@@ -1,27 +1,26 @@
 <ion-view view-title="我的订单">
-    <ion-content>
-        <!-- <div class="list card" ng-repeat="order in orders">
-          <a class="item item-avatar" ui-sref="tab.order-detail({orderId:order.id})">
-            <p>11:00--12:30</p>
-            <p>{{order.id}}</p>
-            <p>{{order.actualPrice}}</p>
-          </a>
-        </div> -->
-
-        <div class="tab-pane">
-
-            <ion-list ng-repeat="order in orders">
+    <ion-nav-buttons side="right">
+        <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
+    </ion-nav-buttons>
+        <ion-content>
+            <!-- <div class="list card" ng-repeat="order in orders">
               <a class="item item-avatar" ui-sref="tab.order-detail({orderId:order.id})">
-                <img src="{{order.course.logoPath}}">
-                <p style="color:#61f0c9">{{order.venue.name}}</p>
+                <p>11:00--12:30</p>
                 <p>{{order.id}}</p>
-                <h2>{{order.course.name}}</h2>
-                <p>{{order.course.introduce}}</p>
-                <h2 style="color:#61f0c9">{{order.course.price | currency : "￥"}}</h2>
+                <p>{{order.actualPrice}}</p>
               </a>
-            </ion-list>
-
-        </div>
-
-    </ion-content>
+            </div> -->
+            <div class="tab-pane">
+                <ion-list ng-repeat="order in orders">
+                  <a class="item item-avatar" ui-sref="tab.order-detail({orderId:order.id})">
+                    <img src="{{order.course.logoPath}}">
+                    <p style="color:#61f0c9">{{order.venue.name}}</p>
+                    <p>{{order.id}}</p>
+                    <h2>{{order.course.name}}</h2>
+                    <p>{{order.course.introduce}}</p>
+                    <h2 style="color:#61f0c9">{{order.course.price | currency : "￥"}}</h2>
+                  </a>
+                </ion-list>
+            </div>
+        </ion-content>
 </ion-view>

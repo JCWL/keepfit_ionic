@@ -1,0 +1,51 @@
+<ion-view view-title="课程详情">
+<ion-nav-buttons side="right">
+    <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
+  </ion-nav-buttons>
+<ion-content class="padding">
+<!-- 轮播图 -->
+
+<ion-slide-box show-pager="false" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
+  <ion-slide ng-repeat="resource in venue.resources">
+    <img ng-src="{{resource.path}}" style="margin:auto; height:250px">
+  </ion-slide>
+</ion-slide-box>
+
+
+
+<ion-item><h2>{{course.name}}</h2>
+</ion-item>
+
+<!-- ng-repeat="1 in [1,2,3,4,5]" -->
+<ion-item>
+  <a class="item item-avatar" ng-click="showpopoverViplist($event)" >
+    <h5>帮您优选的会员</h5>
+    <img style="top:5px;max-width:60px;max-height:60px;border-radius:100px; margin-left:10px" src="{{vipPhoto}}">
+  </a>
+</ion-item> 
+<ion-item href="tel:{{venue.phone}}">
+  <div class="icon ion-ios-telephone-outline">
+      &nbsp;&nbsp;电话：{{venue.phone}}
+  </div>
+</ion-item>
+
+<ion-item ui-sref="tab.map({venueId:venue.id})">
+  <a class="icon icon-left icon-right">
+      <i class="icon ion-ios-location-outline"></i>
+        &nbsp;&nbsp;门店地址：{{venue.addr}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <i class="icon ion-ios-arrow-right" style="margin-right:10px"></i>
+  </a>
+</ion-item>
+
+
+
+
+</ion-content>
+   <div class="bar bar-footer" style="background-color:#ccc;padding-bottom:5px;margin-bottom:48px">
+    <del>原价{{course.originalPrice | currency : "￥"}}</del>&nbsp;&nbsp;&nbsp;&nbsp;
+    <div style="font-color:red">{{course.price | currency : "￥"}}</div>
+    <button class="button button-assertive pull-right" ui-sref="tab.placeOrder({courseId:course.id})">
+      马上预约
+    </button>
+  </div -->>
+</ion-view>

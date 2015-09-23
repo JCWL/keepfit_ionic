@@ -1,56 +1,13 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ["ngSanitize"])
 
 .controller('DashCtrl', function ($scope) {})
 
-.controller('VenuesCtrl', function ($scope, $log, $ionicPopover, $ionicLoading, loadDataService) {
+.controller('VenuesCtrl', function ($scope, $log, $ionicPopover, $state, $stateParams, $ionicLoading, loadDataService) {
   // .fromTemplate() method
   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">{{title}}</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
 
   $scope.caluDates = function () {
-    var today = new Date();
-    today.setDate(today.getDate()-1);
-
-    var res = [];
-    var _year='', _month = '', _date = '', _day = '';
-    for (var i = 0; i < 7; i++) {
-        today.setDate(today.getDate()+1);
-        _year = today.getFullYear();
-        _month = today.getMonth()+1;
-        _date = today.getDate();
-        _day = today.getDay();
-        switch (_day)
-        {
-          case 0:
-            _day = '日';
-            break;
-          case 1:
-            _day = '一';
-            break;
-          case 2:
-            _day = '二';
-            break;
-          case 3:
-            _day = '三';
-            break;
-          case 4:
-            _day = '四';
-            break;
-          case 5:
-            _day = '五';
-            break;
-          case 6:
-            _day = '六';
-            break;
-        }
-        var s = _month + '月' + _date + '日 (周' + _day + ')';
-        var ss = _year + '/' + _month + '/' + _date;
-        var obj = {
-          showDate : s,
-          queryDate : ss
-        }
-        res.push(obj);
-    };
-    return res;
+    
   }
 
   // 初始化日期数据
@@ -197,26 +154,6 @@ angular.module('starter.controllers', [])
       $scope.noMoreItemsAvailable = false;
       $scope.venues = [];
       $scope.loadMore();
-
-    //   var cityInfo = {
-    //   "lon":localStorage.longitude == undefined? '121.585696':localStorage.longitude,
-    //   "lat":localStorage.latitude == undefined? '31.209962':localStorage.latitude,
-    //   "distance":500000,
-    //   "pageSize":3,
-    //   "venueType": $scope.queryCondition.typeId,
-    //   "areaId":$scope.queryCondition.areaId,
-    //   "currentPage": 0,
-    //   "cityId": $scope.queryCondition.cityId
-    //   };
-
-    //   $log.log("requset {/venue/search} with data : " + angular.toJson(cityInfo));
-    //   loadDataService.venueList(angular.toJson(cityInfo)).success(function (data, status) {
-    //   $log.log("response.data : " + angular.toJson(data));
-    //   $scope.venues = $scope.venues.concat(data.content);
-    //   $scope.contentLength = data.content.length;
-    //   $ionicLoading.hide();
-    //   $scope.currentPage++;
-    // });
 }
 
 
@@ -287,6 +224,7 @@ angular.module('starter.controllers', [])
     $scope.$broadcast('scroll.infiniteScrollComplete');
   };
   
+  $scope.loadMore();
   //微信登录验证
   // var access_code=GetQueryString('code');
   // if (access_code!=null && access_code!=""){
@@ -309,16 +247,16 @@ angular.module('starter.controllers', [])
   //     window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";  
   // }
 
-  function GetQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
-    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
-    var context = "";  
-    if (r != null)  
-         context = r[2];  
-    reg = null;  
-    r = null;  
-    return context == null || context == "" || context == "undefined" ? "" : context;  
-  }
+  // function GetQueryString(name) {
+  //   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+  //   var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+  //   var context = "";  
+  //   if (r != null)  
+  //        context = r[2];  
+  //   reg = null;  
+  //   r = null;  
+  //   return context == null || context == "" || context == "undefined" ? "" : context;  
+  // }
   
 })
 .controller('VenueDetailCtrl', function ($log, $rootScope, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService) {
@@ -342,25 +280,73 @@ angular.module('starter.controllers', [])
       settingsService.set("venue", data.content[0]);
       $ionicSlideBoxDelegate.update();
       $ionicLoading.hide();
+      // $scope.$digest();
   });
 
-  var venue = settingsService.get("venue");
-  var param = {
-    "id" : venue.id
-  } ;
-  $log.log("venueId : " + angular.toJson(param)); 
-  $log.log("requset {/venue/searchVenueVip} with data : " + angular.toJson(param));
-  $ionicLoading.show({template: 'Loading...'});
-  loadDataService.searchVenueVip(param).success(function (data, status) {
-      $log.log("response.status : " + status);
-      $log.log("vip response :" + angular.toJson(data));
-      $scope.venuevips = data.content;
-      //$scope.venueVips = $scope.venueVips.concat(data.content);
-      //$log.log("lcw :" + angular.toJson($scope.venueVips));
-      //$rootScope.vipPhoto = data.content[0].smallIcon;
-      //$rootScope.vipName = data.content[0].name;
-      $ionicLoading.hide();
-  });
+  //calculate the time
+  var today = new Date();
+    today.setDate(today.getDate()-1);
+    $scope.dayTest = today.getDate();
+
+
+    var res = [];
+    var _year='', _month = '', _date = '', _day = '';
+    for (var i = 0; i < 7; i++) {
+        today.setDate(today.getDate()+1);
+        _year = today.getFullYear();
+        _month = today.getMonth()+1;
+        _date = today.getDate();
+        _day = today.getDay();
+        switch (_day)
+        {
+          case 0:
+            _day = '日';
+            break;
+          case 1:
+            _day = '一';
+            break;
+          case 2:
+            _day = '二';
+            break;
+          case 3:
+            _day = '三';
+            break;
+          case 4:
+            _day = '四';
+            break;
+          case 5:
+            _day = '五';
+            break;
+          case 6:
+            _day = '六';
+            break;
+        }
+        var s = _month + '月' + _date + '日 (周' + _day + ')';
+        var ss = _year + '/' + _month + '/' + _date;
+        var obj = {
+          showDate : s,
+          queryDate : ss
+        }
+        res.push(obj);
+    };
+    return res;
+  // var venue = settingsService.get("venue");
+  // var param = {
+  //   "id" : venue.id
+  // } ;
+  // $log.log("venueId : " + angular.toJson(param)); 
+  // $log.log("requset {/venue/searchVenueVip} with data : " + angular.toJson(param));
+  // $ionicLoading.show({template: 'Loading...'});
+  // loadDataService.searchVenueVip(param).success(function (data, status) {
+  //     $log.log("response.status : " + status);
+  //     $log.log("vip response :" + angular.toJson(data));
+  //     $scope.venuevips = data.content;
+  //     //$scope.venueVips = $scope.venueVips.concat(data.content);
+  //     //$log.log("lcw :" + angular.toJson($scope.venueVips));
+  //     //$rootScope.vipPhoto = data.content[0].smallIcon;
+  //     //$rootScope.vipName = data.content[0].name;
+  //     $ionicLoading.hide();
+  // });
 
 })
 .controller('CourseDetailCtrl',function ($log, $rootScope, $ionicPopover, $state, $scope, $stateParams, $ionicSlideBoxDelegate, $ionicLoading, loadDataService, settingsService){

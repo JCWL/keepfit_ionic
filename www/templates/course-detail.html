@@ -1,51 +1,79 @@
 <ion-view view-title="课程详情">
-<ion-nav-buttons side="right">
-    <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
-  </ion-nav-buttons>
-<ion-content class="padding">
-<!-- 轮播图 -->
+  <ion-nav-buttons side="right">
+      <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
+    </ion-nav-buttons>
+  <ion-content class="padding">
 
-<ion-slide-box show-pager="false" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
-  <ion-slide ng-repeat="resource in venue.resources">
-    <img ng-src="{{resource.path}}" style="margin:auto; height:250px">
-  </ion-slide>
-</ion-slide-box>
-
-
-
-<ion-item><h2>{{course.name}}</h2>
-</ion-item>
-
-<!-- ng-repeat="1 in [1,2,3,4,5]" -->
-<ion-item>
-  <a class="item item-avatar" ng-click="showpopoverViplist($event)" >
-    <h5>帮您优选的会员</h5>
-    <img style="top:5px;max-width:60px;max-height:60px;border-radius:100px; margin-left:10px" src="{{vipPhoto}}">
-  </a>
-</ion-item> 
-<ion-item href="tel:{{venue.phone}}">
-  <div class="icon ion-ios-telephone-outline">
-      &nbsp;&nbsp;电话：{{venue.phone}}
-  </div>
-</ion-item>
-
-<ion-item ui-sref="tab.map({venueId:venue.id})">
-  <a class="icon icon-left icon-right">
-      <i class="icon ion-ios-location-outline"></i>
-        &nbsp;&nbsp;门店地址：{{venue.addr}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <i class="icon ion-ios-arrow-right" style="margin-right:10px"></i>
-  </a>
-</ion-item>
+  <!-- 轮播图 -->
+  <ion-slide-box show-pager="false" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
+    <ion-slide ng-repeat="resource in venue.resources">
+      <img ng-src="{{resource.path}}" style="margin:auto; height:250px">
+    </ion-slide>
+  </ion-slide-box>
 
 
+    <div id="ccxq-container">
+      <ul class="noStyle ccxq">
+        <li class="titlesec">
+          <h4>{{course.name}}</h4>
+          <p>8月28日（周四）10:00~11:30</p>
+        </li>
+        <li class="sec1"><i class="sprite sprite-fav2"></i>
+          <div class="content">
+            <p><span class="left">性别要求:</span><span class="right">女性</span></p>
+            <p><span class="left">难度等级:</span><span class="right">T - Therapy Series / 理疗</span></p>
+            <p><span class="left">适宜人群:</span><span class="right">成年人</span></p>
+            <p><span class="left">温馨提示:</span><span class="right small">我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</span></p>
+            <p><span class="left">课程描述:</span><span class="right small">我
+我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我
+我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</span></p>
+          </div>
+        </li>
+        <li class="sec2">
+          <div class="sprite sprite-diamond"></div>
+          <div class="content">
+            <p class="title">通过选择会员享受优惠</p><a>
+              <ul class="noStyle userssec" >
+                <li class="vip" ng-click="showpopoverViplist($event)"><img src="{{vipPhoto}}">
+                  <div class="sprite-vip sprite"></div>
+                </li>
+                <li class="user"><img src="%E6%82%A6%E5%81%A5_files/4.jpg"></li>
+                <li class="user"><img src="%E6%82%A6%E5%81%A5_files/4.jpg"></li>
+                <li class="user"><img src="%E6%82%A6%E5%81%A5_files/4.jpg"></li>
+                <li class="user"><img src="%E6%82%A6%E5%81%A5_files/4.jpg"></li>
+                <li class="user"><img src="%E6%82%A6%E5%81%A5_files/4.jpg"></li>
+                <li class="user"><img src="%E6%82%A6%E5%81%A5_files/4.jpg"></li>
+                <li class="text"><span>...20</span></li>
+              </ul>
+              <div class="sprite sprite-arrowright"></div></a>
+            <div class="clear"></div>
+            <p class="bubble">您可以通过我的会员特权，享受优惠的私教课程体验，健身是一个坚持的过程</p>
+          </div>
+        </li>
+        <li class="sec3"><a><i class="sprite sprite-home"></i>
+            <p class="content"><span class="title">门店信息:</span><span class="det">{{venue.name}}</p><i class="sprite sprite-arrowright"></i></a></li>
+        <li class="sec3"><a><i class="sprite sprite-phone"></i>
+            <p class="content"><span class="title">门店电话:</span><span class="det">{{venue.phone}}</span></p><i class="sprite sprite-arrowright"></i></a></li>
+        <li class="sec3"><a><i class="sprite sprite-loc"></i>
+            <p class="content"><span class="title">门店地址:</span><span class="det">{{venue.addr}}</span></p><i class="sprite sprite-arrowright"></i></a></li>
+      </ul>
+      
+    </div>
+    </ion-content>
+    <div class="ccxq-bottom">
+          <p class="title">通过会员购买价</p>
+          <div class="prices"><span class="p1">￥</span><span class="p2">{{course.price }}</span><span class="p3">原价：{{course.originalPrice | currency : "￥"}}</span></div><a class="buybtn" ui-sref="tab.placeOrder({courseId:course.id})">马上预约</a>
+    </div>
 
 
-</ion-content>
-   <div class="bar bar-footer" style="background-color:#ccc;padding-bottom:5px;margin-bottom:48px">
+
+
+
+   <!-- <div class="bar bar-footer" style="background-color:#ccc;padding-bottom:5px;margin-bottom:48px">
     <del>原价{{course.originalPrice | currency : "￥"}}</del>&nbsp;&nbsp;&nbsp;&nbsp;
     <div style="font-color:red">{{course.price | currency : "￥"}}</div>
     <button class="button button-assertive pull-right" ui-sref="tab.placeOrder({courseId:course.id})">
       马上预约
     </button>
-  </div -->>
+  </div> -->
 </ion-view>

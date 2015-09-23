@@ -8,6 +8,57 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives'])
 
 .run(function ($ionicPlatform, $rootScope, $state, $stateParams, userService, loadDataService) {
+
+  // judge the browser
+  // var browser  = isWeiXin();
+  // if(!browser){
+  //   window.location.href="../templates/tab-browser.html";
+  // }else{
+  //   var access_code=GetQueryString('code');
+  // if (access_code!=null && access_code!=""){
+  //   localStorage.accessCode = access_code;
+  //   var param = {
+  //       code:access_code
+  //   };
+  //   loadDataService.oauth2getAccessToken(param).success(function (data, status) {
+  //     //alert("excute oauth2getAccessToken : " + angular.toJson(data));
+  //     localStorage.openId = data.content[0].openId;
+  //     $scope.disable = false;
+  //     $scope.$digest();
+
+  //     }).error(function(status){
+  //       alert("微信认证失败");
+  //     });
+  // }else{
+  //     var currenturl=window.location.href;
+  //     window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdf0798b126b0c235&redirect_uri="+encodeURIComponent(currenturl)+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";  
+  // }
+  // function GetQueryString(name) {
+  //   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+  //   var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+  //   var context = "";  
+  //   if (r != null)  
+  //        context = r[2];  
+  //   reg = null;  
+  //   r = null;  
+  //   return context == null || context == "" || context == "undefined" ? "" : context;  
+  // }
+
+  // }
+ 
+  // function isWeiXin(){ 
+  //   var ua = window.navigator.userAgent.toLowerCase(); 
+  //   if(ua.match(/MicroMessenger/i) == 'micromessenger')
+  //     { 
+  //       return true; 
+  //     }else
+  //     { 
+  //       return false; 
+  //     } 
+  //   } 
+
+  
+
   //WeChat init;
   var param = {
     "url":window.location.href
@@ -104,6 +155,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         'tab-venues': {
           templateUrl: 'templates/tab-venues.html',
           controller: 'VenuesCtrl'
+        }
+      }
+    })
+  .state('tab.browser', {
+      url: '/browser',
+      views: {
+        'tab-venues': {
+          templateUrl: 'templates/tab-browser.html',
         }
       }
     })

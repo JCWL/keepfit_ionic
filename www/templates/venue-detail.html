@@ -1,9 +1,9 @@
 <body ng-controller="VenueDetailCtrl">
   <div class="container" media=screen >
-     <ion-view view-title="场馆详情">
+    <ion-view view-title="场馆详情">
         <ion-nav-buttons side="right">
             <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
-          </ion-nav-buttons>
+        </ion-nav-buttons>
 
         <ion-content>
           <ion-slide-box show-pager="true" auto-play="true" slide-interval="2000" delegate-handle="slideimgs" does-continue="true">
@@ -13,10 +13,9 @@
                 <p>{{resource.id}}</p>
               </div> -->
             </ion-slide>
-        </ion-slide-box>
+          </ion-slide-box>
 
         <div ng-tabs class="tabbable">
-
             <ul class="nav nav-tabs" style="margin-bottom: 20px; margin-top: 10px; font-size: 20px;">
                 <li ng-tab-head="active">
                     <a href="#" ng-click="$event.preventDefault()">简介</a>
@@ -25,51 +24,125 @@
                     <a href="#" ng-click="$event.preventDefault()">课程</a>
                 </li>
             </ul>
-            <div class="tab-content" style="overflow: hidden">
 
-                <!-- 场馆简介 -->
-                <div ng-tab-body="animated bounceInUp" class="tab-pane">
 
-                    <ion-list >
-                      <ion-item><h2>{{venue.name}}</h2></ion-item>
-                      <ion-item href="tel:{{venue.phone}}">
-                        <div class="icon ion-ios-telephone-outline">
-                          &nbsp;&nbsp;电话：{{venue.phone}}
-                        </div>
-                      </ion-item>
-                      <ion-item ui-sref="tab.map({venueId:venue.id})">
-                        <a class="icon icon-left icon-right">
-                            <i class="icon ion-ios-location-outline"></i>
-                              &nbsp;&nbsp;门店地址：{{venue.addr}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <i class="icon ion-ios-arrow-right" style="margin-right:10px"></i>
-                        </a>
-                      </ion-item>
-                    
+          <div class="tab-content" style="overflow: hidden">
 
-                    <!-- 简介 -->
-                    <div class="item item-body" >
-                        <h2>简介</h2>
-                        <p style="margin-left:10px ; width:36%">{{venue.introduce}}</p>
+              <!-- 场馆简介 -->        
+              <div ng-tab-body="animated bounceInUp" class="tab-pane">
+
+                <ul class="noStyle cgjj-details">
+                  <li class="sec0">
+                  </li>
+                  <li class="titlesec">
+                    <h4>{{venue.name}}</h4>
+                    <div class="icons">
+                      <i class="sprite sprite-wifi"></i>
+                      <i class="sprite sprite-shower"></i>
+                      <i class="sprite sprite-yigui"></i>
+                      <p>
+                        <span class="text">wifi</span>
+                        <span class="text">淋浴</span>
+                        <span class="text">衣柜</span>
+                      </p>
                     </div>
-                  </ion-list> 
-                </div>
+                  </li>
+                  <li class="sec1">
+                    <a>
+                      <i class="sprite sprite-phone"></i>
+                        <p class="content">
+                          <span class="title" href="tel:{{venue.phone}}">门店电话:</span>
+                          <span class="det">{{venue.phone}}</span>
+                        </p>                     
+                      <i class="sprite sprite-arrowright"></i>
+                    </a>
+                  </li>
+                  <li class="sec2" ui-sref="tab.map({venueId:venue.id})">
+                    <i class="sprite sprite-loc"></i>
+                    <p class="content">
+                      <span class="title">门店地址:</span>
+                      <span class="det">{{venue.addr}}</span>
+                    </p>
+                  </li>
+                  <li class="sec3">
+                    <i class="sprite sprite-label"></i>
+                    <p class="title">门店概况:</p>
+                    <div class="content">
+                      <!-- <p>{{venue.introduce}}</p> -->
+                      <div ng-bind-html="venue.introduce"></div>
+                    </div>
+                  </li>
+                 <!--  <li class="sec3" ui-sref="tab.map({venueId:venue.id})"><i class="sprite sprite-label"></i>
+                    <p class="title">场馆简介:</p>
+                    <div class="content">
+                      
+                    </div>
+                  </li> -->
+                </ul>
+              </div>
 
                 <!-- 课程列表 --> 
                 <div ng-tab-body="animated bounceInUp" class="tab-pane">
-
+                  <div class="cgxq-calendar">
+                    <p class="month">(9月20~9月26号)</p>
+                    <table class="days">
+                      <tbody><tr class="sec1">
+                        <td>日</td>
+                        <td>一</td>
+                        <td>二</td>
+                        <td>三</td>
+                        <td>四</td>
+                        <td>五</td>
+                        <td>六</td>
+                      </tr>
+                      <tr class="sec2">
+                        <td><a>13</a></td>
+                        <td><a>14</a></td>
+                        <td><a>15</a></td>
+                        <td><a>16</a></td>
+                        <td class="today"><a>{{dayTest}}</a></td>
+                        <td class="thismonth"><a>18</a></td>
+                        <td class="thismonth"><a>19</a></td>
+                      </tr>
+                      <tr class="sec2">
+                        <td class="thismonth"><a>20</a></td>
+                        <td class="thismonth"><a>21</a></td>
+                        <td class="thismonth"><a>22</a></td>
+                        <td class="thismonth"><a>23</a></td>
+                        <td class="thismonth"><a>24</a></td>
+                        <td><a>25</a></td>
+                        <td><a>26</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
                     <ion-list ng-repeat="course in courses">
-                      <a class="item item-avatar" ui-sref="tab.course-detail({courseId:course.id})">
-                        <img src="{{course.logoPath}}">
-                        <p style="color:#61f0c9">11:00--12:30</p>
-                        <h2>{{course.name}}</h2>
-                        <p>{{course.introduce}}</p>
-                        <h2 style="color:#61f0c9">{{course.price | currency : "￥"}}</h2>
-                      </a>
+                      <ul class="noStyle cgxq-lessions">  
+                          <a class="item item-avatar"  ui-sref="tab.course-detail({courseId:course.id})"> 
+                            <img src="{{course.logoPath}}" alt="">
+                            <div class="secright" style="margin-left:60px">
+                              <h4>{{course.name}}</h4>
+                              <p>{{course.introduce}}</p>
+                              <div class="prices">
+                                <span class="p1">
+                                  <i>￥</i>
+                                  <span>100</span>
+                                </span><span class="p2">￥300</span>
+                              </div>
+                              <span class="time">10:00~11:30</span>
+                              <div class="sprite-arrowright sprite"></div>
+                            </div>
+                          </a>                      
+                      </ul>
                     </ion-list>
-
-                </div>                
+                </div>  
             </div>
         </div>
   </div>
-
 </body>
+
+
+
+
+
+  

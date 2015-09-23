@@ -1,10 +1,6 @@
-<ion-popover-view style="width:100%;height:500px;">
-  <!-- <ion-nav-buttons side="right">
-    <a class="button button-icon ion-ios-person" ui-sref="tab.account"></a>
-  </ion-nav-buttons> -->
+<ion-popover-view style="width: 400px; height: 400px; top: 200px; left: 0px; right: 0px;">
 
   <ion-content>
-        
         <ion-list >
             <a class="item item-icon-left" style="background-color:#f6f301" href="#">
                 <h>健身房年卡会员的优惠特权<h>
@@ -13,16 +9,16 @@
                 <li><h>通过“悦健”健身平台成为健身会员将会享受更多的优惠</h></li>
             </a>
         </ion-list>
-          <!--   <ion-list ng-repeat="venuevip in venuevips">
-              <label class="item item-radio">
-               <a class="item item-avatar">
-                  <img style="top:5px;max-width:60px;max-height:60px;border-radius:100px" src="{{venuevip.smallIcon}}">
-                  <p style="margin-left:30px;margin-top:10px">{{venuevip.name}}</p>
-                  <i class="radio-icon icon-checkmark"></i>
-               </a>
-              </label>
-            </ion-list> -->
-     <ion-list ng-repeat="venuevip in venuevips" ng-click="chooseVip(venuevip)">
+        <!--   <ion-list ng-repeat="venuevip in venuevips">
+            <label class="item item-radio">
+             <a class="item item-avatar">
+                <img style="top:5px;max-width:60px;max-height:60px;border-radius:100px" src="{{venuevip.smallIcon}}">
+                <p style="margin-left:30px;margin-top:10px">{{venuevip.name}}</p>
+                <i class="radio-icon icon-checkmark"></i>
+             </a>
+            </label>
+          </ion-list> -->
+        <ion-list ng-repeat="venuevip in venuevips" ng-click="chooseVip(venuevip)">
           <label class="item item-radio" >
            <input type="radio" name="group">
             <a class="item item-avatar" >
@@ -33,8 +29,6 @@
            </input>
           </label>
         </ion-list>
-
-    </ion-content>
-    
+  </ion-content>    
 
 </ion-popover-view>
