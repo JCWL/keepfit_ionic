@@ -58,37 +58,37 @@ ul.noStyle {
 .sprite-wifi {
   width: 24px;
   height: 24px;
-  background-position: -18px -63px;
+  background-position: -17px -59px;
 }
 .sprite-shower {
   width: 24px;
   height: 24px;
-  background-position: -77.5px -63px;
+  background-position: -79px -59px;
 }
 .sprite-yigui {
   width: 24px;
   height: 24px;
-  background-position: -136.5px -63px;
+  background-position: -138px -60px;
 }
 .sprite-phone {
   width: 20px;
   height: 20px;
-  background-position: -20px -114.5px;
+  background-position: -23px -112px;
 }
 .sprite-loc {
   width: 20px;
   height: 20px;
-  background-position: -20px -166px;
+  background-position: -22px -162px;
 }
 .sprite-label {
   width: 20px;
   height: 20px;
-  background-position: -81.5px -166px;
+  background-position: -80px -163px;
 }
 .sprite-fav2 {
   width: 20px;
   height: 20px;
-  background-position: -141.5px -166px;
+  background-position: -138px -162px;
 }
 .sprite-calendar {
   width: 18px;
@@ -98,17 +98,17 @@ ul.noStyle {
 .sprite-diamond {
   width: 20px;
   height: 20px;
-  background-position: -139px -114.5px;
+  background-position: -135px -111px;
 }
 .sprite-vip {
   width: 16px;
   height: 16px;
-  background-position: -205px -168px;
+  background-position: -200px -164px;
 }
 .sprite-home {
   width: 20px;
   height: 20px;
-  background-position: -198.5px -114.5px;
+  background-position: -198px -110px;
 }
 .navbar {
   margin: 0;
@@ -272,33 +272,35 @@ ul.noStyle.cgxq-lessions li.lession > a .secright h4 {
 ul.noStyle.cgxq-lessions  a .secright p {
   margin: 0;
   margin-bottom: 3px;
-  font-size: 11px;
+  font-size: 14px;
   color: #5c5c5c;
 }
 ul.noStyle.cgxq-lessions  a .secright .prices {
   margin-bottom: 5px;
 }
 ul.noStyle.cgxq-lessions  a .secright .prices .p1 {
-  color: #ffa800;
+  color: #48c784;
 }
 ul.noStyle.cgxq-lessions  a .secright .prices .p1 i {
-  font-size: 8px;
+  font-size: 14px;
   font-style: normal;
 }
 ul.noStyle.cgxq-lessions  a .secright .prices .p1 span {
-  font-size: 15px;
+  font-size: 18px;
+  font-weight: bolder;
   margin-right: 10px;
+  padding-left: -5px;
 }
 ul.noStyle.cgxq-lessions  a .secright .prices .p2 {
-  font-size: 9px;
+  font-size: 14px;
   color: #afaeae;
   text-decoration: line-through;
 }
 ul.noStyle.cgxq-lessions  a .secright .time {
   position: absolute;
-  top: 0;
-  right: 11px;
-  font-size: 9px;
+  top: 10px;
+  right: 20px;
+  font-size: 10px;
   color: #5c5c5c;
   margin-right: 560px;
 }
@@ -359,7 +361,7 @@ ul.cgjj-details li.sec1 a .sprite {
 ul.cgjj-details li.sec1 a i.sprite:nth-child(1) {
   float: left;
   margin-right: 5px;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-left: 11px;
 }
 ul.cgjj-details li.sec1 a i.sprite-arrowright {
